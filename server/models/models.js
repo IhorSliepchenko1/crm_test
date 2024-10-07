@@ -9,6 +9,7 @@ const User = sequilize.define(`user`, {
   role: { type: DataTypes.STRING, defaultValue: `USER` },
 });
 
+// CashRegister
 const CashRegister = sequilize.define(`cash_register`, {
   id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
   cash: { type: DataTypes.DECIMAL(10, 2), allowNull: false },
@@ -17,6 +18,7 @@ const CashRegister = sequilize.define(`cash_register`, {
   date: { type: DataTypes.DATE, allowNull: false },
 });
 
+// TypesExpenses
 const TypesExpenses = sequilize.define(`types_expenses`, {
   id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
   name: { type: DataTypes.STRING, unique: true, allowNull: false },

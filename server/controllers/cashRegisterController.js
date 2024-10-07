@@ -1,6 +1,6 @@
 const ApiError = require(`../error/ApiError`);
 const { CashRegister } = require(`../models/models`);
-const { Op, where } = require(`sequelize`);
+const { Op } = require(`sequelize`);
 
 class CashRegisterController {
   async deposit(req, res, next) {
@@ -38,7 +38,7 @@ class CashRegisterController {
 
       return res.status(200).json(cashRegister);
     } catch (error) {
-      next(ApiError.badRequest(error.message));
+      next(ApiError.internal(error.message));
     }
   }
   async getAll(req, res, next) {
@@ -71,7 +71,7 @@ class CashRegisterController {
 
       return res.status(200).json(data);
     } catch (error) {
-      next(ApiError.badRequest(error.message));
+      next(ApiError.internal(error.message));
     }
   }
   async edit(req, res, next) {
@@ -93,7 +93,7 @@ class CashRegisterController {
 
       return res.status(200).json(cashRegisterUpdate);
     } catch (error) {
-      next(ApiError.badRequest(error.message));
+      next(ApiError.internal(error.message));
     }
   }
   async delete(req, res, next) {
@@ -106,7 +106,7 @@ class CashRegisterController {
 
       return res.status(200).json(`id: ${id} удалён `);
     } catch (error) {
-      next(ApiError.badRequest(error.message));
+      next(ApiError.internal(error.message));
     }
   }
 }

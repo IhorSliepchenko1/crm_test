@@ -11,4 +11,3 @@ module.exports = new Sequelize(
   }
 );
 
-// dkfjgfjgi
