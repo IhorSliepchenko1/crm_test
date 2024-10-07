@@ -10,3 +10,5 @@ module.exports = new Sequelize(
     port: process.env.DB_PORT,
   }
 );
+
+// dkfjgfjgi
