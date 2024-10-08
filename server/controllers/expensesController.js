@@ -56,7 +56,7 @@ class ExpensesController {
                               date: {
                                    // YYYY-MM-DD
                                    [Op.between]: [from, to],
-                              },
+                              },ёё
                          },
                          limit,
                          offset,
