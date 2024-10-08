@@ -18,6 +18,11 @@ class UserController {
         return next(ApiError.notFound(`Логин и пароль обязательны!`));
       }
 
+
+      if (password.length < 6) {
+        return next(ApiError.badRequest(`Пароль должен быть не менее 6 символов`));
+      }
+
       const candidate = await User.findOne({ where: { login } });
 
       if (candidate) {
@@ -54,7 +59,7 @@ class UserController {
 
       const token = generateJwt(user.id, user.email, user.role);
 
-      return res.json({ token });
+      return res.json(token);
     } catch (error) {
       next(ApiError.internal(error.message));
     }
@@ -63,7 +68,7 @@ class UserController {
   async check(req, res, next) {
     try {
       const token = generateJwt(req.user.id, req.user.login, req.user.role);
-      res.json({ token });
+      res.json(token);
     } catch (error) {
       next(ApiError.internal(error.message));
     }
