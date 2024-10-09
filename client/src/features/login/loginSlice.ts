@@ -30,7 +30,7 @@ export const fetchLogin = createAsyncThunk(
 const loginSlice = createSlice({
      name: "login",
      initialState: {
-          token: localStorage.getItem("token") || null as string | null,
+          token: JSON.parse(localStorage.getItem("token") as string) || null as string | null,
           status: "idle" as RequestState,
      },
      reducers: {

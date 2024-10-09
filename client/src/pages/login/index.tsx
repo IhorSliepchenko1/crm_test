@@ -3,6 +3,7 @@ import { useAppDispatch, useAppSelector } from "../../app/hook";
 import { fetchLogin } from "../../features/login/loginSlice";
 import { fetchAuth } from "../../features/auth/authSlice";
 import { useEffect } from "react";
+import { useNavigate } from "react-router";
 
 type FormValues = {
      login: string;
@@ -12,25 +13,21 @@ type FormValues = {
 const Login = () => {
 
      const dispatch = useAppDispatch()
-     const token = useAppSelector((state) => state.token)
+     const { token } = useAppSelector((state) => state.token)
      const { register, handleSubmit } = useForm<FormValues>();
+     const navigate = useNavigate()
      const onSubmit = (data: FormValues) => {
           dispatch(fetchLogin({ data }));
      }
 
-     const auth = async () => {
-          const test = await dispatch(fetchAuth(token.token as string))
-
-          console.log(test);
-
-     }
-
-
      useEffect(() => {
-          if (token.token) {
-               auth()
+
+          if (token) {
+               dispatch(fetchAuth(token));
+               navigate(`/`)
           }
-     }, [token])
+
+     }, [dispatch, navigate, token])
 
 
      return (

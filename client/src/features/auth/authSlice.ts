@@ -13,12 +13,17 @@ export const fetchAuth = createAsyncThunk(
      "auth/fetchAuth",
      async (token: string, { rejectWithValue }) => {
           try {
+
                const response = await axios.get(`${URL}/user/auth`, {
                     headers: {
                          "Content-Type": "application/json",
-                         "autorization": `Barear ${token}`
+                         "Autorization": `Barear ${token}`
                     },
                });
+
+
+
+
                return response.data;
           } catch (error) {
                const errorResponse = error as AxiosError;
@@ -30,7 +35,7 @@ export const fetchAuth = createAsyncThunk(
 export const authSlice = createSlice({
      name: "auth",
      initialState: {
-          token: localStorage.getItem("token") || null as string | null,
+          token: JSON.parse(localStorage.getItem("token") as string) || null as string | null,
           status: "idle",
      } as initialState,
 
