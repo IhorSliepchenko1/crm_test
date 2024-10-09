@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import axios, { AxiosError } from "axios";
+import axios from "axios";
 import { RequestState } from "../../types/types";
 import { URL } from "../../api/baseUrl";
 
@@ -21,8 +21,8 @@ export const fetchLogin = createAsyncThunk(
                });
                return response.data;
           } catch (error) {
-               const errorResponse = error as AxiosError;
-               return rejectWithValue(errorResponse.message);
+               const errorResponse = error as string;
+               return rejectWithValue(errorResponse);
           }
      }
 );

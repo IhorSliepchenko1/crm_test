@@ -2,7 +2,7 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios, { AxiosError } from "axios";
 import { RequestState } from "../../types/types";
 import { URL } from "../../api/baseUrl";
-
+import { RootState } from "../../app/store";
 
 type initialState = {
      token: string | null;
@@ -63,3 +63,4 @@ export const authSlice = createSlice({
 });
 
 export const { logout } = authSlice.actions;
+export const selectIsAuthenticated = (state: RootState) => !!state.token.token;

@@ -1,15 +1,23 @@
-import { Navigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import { useEffect } from "react";
 import { useAppSelector } from "../../app/hook";
+import { selectIsAuthenticated } from "../../features/auth/authSlice";
 
-const ProtectedRoute = ({ children }: React.PropsWithChildren<unknown>) => {
-     const { token } = useAppSelector((state) => state.token);
+type Props = {
+     children: React.ReactElement[] | React.ReactElement;
+};
 
-     if (token !== null) {
-          console.log(token);
-          return <Navigate to="/auth" />;
-     }
+const ProtectedRoute: React.FC<Props> = ({ children }) => {
+     const isAuthenticated = useAppSelector(selectIsAuthenticated);
+     const navigate = useNavigate();
 
-     return children
+     useEffect(() => {
+          if (!isAuthenticated) {
+               navigate(`/auth`);
+          }
+     }, [isAuthenticated, navigate]);
+
+     return children;
 };
 
 export default ProtectedRoute;

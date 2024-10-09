@@ -1,0 +1,23 @@
+.form {
+     margin-top: 150px;
+     display: grid;
+     gap: 10px;
+     justify-content: center;
+     align-items: center;
+
+}
+
+.input_container {
+     display: grid;
+     gap: 20px;
+}
+
+.btn_slot {
+     display: flex;
+     justify-content: flex-end;
+     margin-top: 25px;
+}
+
+.error {
+     color: red;
+}
