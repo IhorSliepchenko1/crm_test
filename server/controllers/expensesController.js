@@ -10,9 +10,13 @@ class ExpensesController {
           try {
                const { name, date, sum, typesExpenseId } = req.body;
 
-               const { img } = req.files;
-               let fileName = uuid.v4() + `.jpg`;
-               img.mv(path.resolve(__dirname, `..`, `static`, fileName));
+               let fileName
+
+               if (req.files) {
+                    const { img } = req.files
+                    fileName = uuid.v4() + `.jpg`;
+                    img.mv(path.resolve(__dirname, `..`, `static`, fileName));
+               }
 
 
                if (!name || !date || !sum) {
@@ -56,7 +60,7 @@ class ExpensesController {
                               date: {
                                    // YYYY-MM-DD
                                    [Op.between]: [from, to],
-                              },ёё
+                              }, ёё
                          },
                          limit,
                          offset,
@@ -101,6 +105,13 @@ class ExpensesController {
           const { id } = req.params;
 
           try {
+               const delId = await Expenses.findOne({ where: { id } })
+
+               if (!delId) {
+                    return next(ApiError.notFound(`id в базе отсутствует или ранее был удалён!`));
+               }
+
+
                await Expenses.destroy({ where: { id } });
                // await deleteId.destroy();
 

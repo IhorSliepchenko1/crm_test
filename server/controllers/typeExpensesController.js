@@ -45,6 +45,13 @@ class TypesExpensesController {
           try {
                const { id } = req.params;
 
+               const delId = await TypesExpenses.findOne({ where: { id } })
+
+               if (!delId) {
+                    return next(ApiError.notFound(`id в базе отсутствует или ранее был удалён!`));
+               }
+
+
                await TypesExpenses.destroy({ where: { id } })
 
                return res.status(200).json(`Категория удалена`);

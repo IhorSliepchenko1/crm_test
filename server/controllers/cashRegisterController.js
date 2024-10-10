@@ -98,9 +98,17 @@ class CashRegisterController {
   }
   async delete(req, res, next) {
     const { id } = req.params;
-    console.log(id);
+
+
 
     try {
+
+      const delId = await CashRegister.findOne({ where: { id } })
+
+      if (!delId) {
+        return next(ApiError.notFound(`id в базе отсутствует или ранее был удалён!`));
+      }
+
       await CashRegister.destroy({ where: { id } });
       // await deleteId.destroy();
 
