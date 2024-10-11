@@ -43,6 +43,9 @@ class CashRegisterController {
   }
   async getAll(req, res, next) {
     let { limit, page, from, to } = req.query;
+
+    console.log(limit, page, from, to);
+
     try {
       page = page || 1;
       limit = limit || 20;

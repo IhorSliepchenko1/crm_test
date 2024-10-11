@@ -66,7 +66,7 @@ class UserController {
     }
   }
 
-  async check(req, res, next) {
+  async current(req, res, next) {
     try {
       const user = req.user
       res.json(user);
