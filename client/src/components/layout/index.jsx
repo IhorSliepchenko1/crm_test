@@ -20,11 +20,9 @@ const Layout = () => {
 
      return (
           <ProtectedRoute>
+               <NavBar />
                <div >
-                    <NavBar />
-                    <div className="layout">
-                         <Outlet />
-                    </div>
+                    <Outlet />
                </div>
           </ProtectedRoute>
      )

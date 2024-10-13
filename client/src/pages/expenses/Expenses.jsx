@@ -1,4 +1,3 @@
-import './Expenses.scss'
 
 const Expenses = () => {
      return (

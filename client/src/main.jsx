@@ -3,12 +3,18 @@ import { createRoot } from 'react-dom/client'
 import './index.scss'
 import { Provider } from 'react-redux'
 import { store } from './store/store.js'
-import { RouterProvider } from 'react-router-dom'
-import { router } from './router.jsx'
+import { NextUIProvider } from '@nextui-org/react'
+import { ThemeProvider } from './theme/index.jsx'
+import App from './App.jsx'
+
 createRoot(document.getElementById('root')).render(
 
   <Provider store={store}>
-    <RouterProvider router={router} />
+    <ThemeProvider>
+      <NextUIProvider>
+        <App />
+      </NextUIProvider>
+    </ThemeProvider>
   </Provider>
 
 )

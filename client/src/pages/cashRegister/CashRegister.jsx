@@ -1,91 +1,132 @@
-import './CashRegister.scss'
-// import Pagination from '@mui/material/Pagination';
-
-import { useEffect, useState } from 'react'
-import { useHandleChange } from '../../hooks/useHandleChange'
+import { useState, useMemo, useEffect } from 'react'
+import { Table, TableHeader, TableColumn, TableBody, TableRow, TableCell, Pagination, Button } from "@nextui-org/react";
+import { Spinner } from "@nextui-org/spinner";
 import { useDispatch, useSelector } from 'react-redux'
 import { fetchCashRegisterSlice } from '../../features/cashRegisterSlice/cashRegisterSlice';
+import { AiFillEdit } from "react-icons/ai";
+import { FaRegTrashAlt } from "react-icons/fa";
+import { Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, useDisclosure, Checkbox, Input, Link } from "@nextui-org/react";
 
 
 const CashRegister = () => {
-
-     const [data, setData] = useState({ page: 1, from: '', to: '' });
-     const { handleChange } = useHandleChange(data, setData);
-
-
      const dispatch = useDispatch();
      const state = useSelector((state) => state.cashRegister);
-
-     const get = async (page, from, to) => {
-          try {
-               dispatch(fetchCashRegisterSlice({ page, from, to }));
-          } catch (err) {
-               console.error("Ошибка:", err);
-          }
-     }
+     const [page, setPage] = useState(1);
+     const { isOpen, onOpen, onOpenChange } = useDisclosure();
 
      useEffect(() => {
-          get(data.page, data.from, data.to);
-     }, [data.page, data.to]);
+          dispatch(fetchCashRegisterSlice({ page: page }));
 
+     }, [dispatch, page]);
+
+     const pages = Math.ceil(state.data.count / 20);
+     const items = useMemo(() => state.data.rows || [], [state.data.rows]);
 
 
      return (
+          <div>
 
-          <div className='cash-wrapper'>
-               <div className='date'>
-                    <div>
-                         От: <input type="date" name="from" onChange={handleChange} />
-                    </div>
-                    <div>
-                         До: <input type="date" name="to" onChange={handleChange} />
-                    </div>
+               <div className='flex flex-col btn'>
+                    <Button color="success" onPress={onOpen}>
+                         Внести кассу
+                    </Button>
+
                </div>
-
-               <table>
-                    <thead>
-                         <tr>
-                              <th>
-                                   Дата
-                              </th>
-                              <th>
-                                   Наличные
-                              </th>
-                              <th>
-                                   Безналичные
-                              </th>
-                              <th>
-                                   Сумма
-                              </th>
-                         </tr>
-                    </thead>
-
-                    <tbody>
-                         {state.data.rows && state.data.rows.map(item => (
-                              <tr key={item.id} className="cash-register-item">
-                                   {/* <td>{item.id}</td> */}
-                                   <td>{new Date(item.date).toISOString().split('T')[0]}</td>
-                                   <td>{item.cash}</td>
-                                   <td>{item.cashless}</td>
-                                   <td>{item.totalCash}</td>
-                              </tr>
+               {state.status === `loading` ? <Spinner /> : <Table
+                    bottomContent={
+                         pages > 0 ? (
+                              <div className="flex justify-center">
+                                   <Pagination
+                                        isCompact
+                                        showControls
+                                        showShadow
+                                        color="primary"
+                                        page={page}
+                                        total={pages}
+                                        onChange={(page) => setPage(page)}
+                                   />
+                              </div>
+                         ) : null
+                    }
+               >
+                    <TableHeader>
+                         <TableColumn key="date">Дата</TableColumn>
+                         <TableColumn key="cash">Наличные</TableColumn>
+                         <TableColumn key="cashless">Безналичные</TableColumn>
+                         <TableColumn key="totalCash">Сумма</TableColumn>
+                         <TableColumn >Изменить / Удалить</TableColumn>
+                    </TableHeader>
+                    <TableBody>
+                         {items.map((item) => (
+                              <TableRow key={item.id}>
+                                   <TableCell>{item.date.split(`T`)[0].split(`-`).reverse().join(`.`)}</TableCell>
+                                   <TableCell>{item.cash}</TableCell>
+                                   <TableCell>{item.cashless}</TableCell>
+                                   <TableCell>{item.totalCash}</TableCell>
+                                   <TableCell className='btn-container'>
+                                        <AiFillEdit className='cursor-pointer' />
+                                        <FaRegTrashAlt className='cursor-pointer' />
+                                   </TableCell>
+                              </TableRow>
                          ))}
-                    </tbody>
+                    </TableBody>
+               </Table>}
 
-               </table>
 
-               {/* <div className='pagination'>
-                    <Pagination
-                         count={Math.ceil(state.data.count / 20)}
-                         page={data.page}
-                         onChange={handleChange}
-                         showFirstButton
-                         showLastButton
-                    />
-               </div> */}
+               <Modal
+                    isOpen={isOpen}
+                    onOpenChange={onOpenChange}
+                    placement="top-center"
+               >
+                    <ModalContent>
+                         {(onClose) => (
+                              <>
+                                   <ModalHeader className="flex flex-col gap-1">Log in</ModalHeader>
+                                   <ModalBody>
+                                        <Input
+                                             autoFocus
+
+                                             label="Email"
+                                             placeholder="Enter your email"
+                                             variant="bordered"
+                                        />
+                                        <Input
+
+                                             label="Password"
+                                             placeholder="Enter your password"
+                                             type="password"
+                                             variant="bordered"
+                                        />
+                                        <div className="flex py-2 px-1 justify-between">
+                                             <Checkbox
+                                                  classNames={{
+                                                       label: "text-small",
+                                                  }}
+                                             >
+                                                  Remember me
+                                             </Checkbox>
+                                             <Link color="primary" href="#" size="sm">
+                                                  Forgot password?
+                                             </Link>
+                                        </div>
+                                   </ModalBody>
+                                   <ModalFooter>
+                                        <Button color="danger" variant="flat" onPress={onClose}>
+                                             Close
+                                        </Button>
+                                        <Button color="primary" onPress={onClose}>
+                                             Sign in
+                                        </Button>
+                                   </ModalFooter>
+                              </>
+                         )}
+                    </ModalContent>
+               </Modal>
           </div>
 
-     )
+
+     );
 }
+
 
 export default CashRegister

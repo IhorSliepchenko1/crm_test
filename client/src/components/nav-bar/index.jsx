@@ -1,35 +1,39 @@
-// import Button from '@mui/material/Button';
 import { useDispatch } from 'react-redux';
-import style from './index.module.scss'
+import { Button } from "@nextui-org/react";
+import { logout } from '../../features/user/authSlice';
 import { NavLink } from 'react-router-dom';
-import { logout } from '../../features/user/authSlice'
 
 const NavBar = () => {
-
   const dispatch = useDispatch()
 
-
   return (
-    <nav className={style.nav}>
-      <ul>
-        <li>
-          <NavLink to="/">
-            Касса
-          </NavLink>
-        </li>
-        <li>
-          <NavLink to="/expenses">
-            Расходы
-          </NavLink>
-        </li>
-        <li>
-          <NavLink to="/register">
-            Регистрация
-          </NavLink>
-        </li>
-      </ul>
-      <button onClick={() => dispatch(logout())}>Выход</button>
-    </nav>
+
+
+
+    <div className='flex items-center justify-between header'>
+      <div className='nav'>
+        <NavLink to="/">
+          Касса
+        </NavLink>
+
+
+        <NavLink to="/expenses">
+          Расходы
+        </NavLink>
+
+        <NavLink to="/register">
+          Регистрация
+        </NavLink>
+
+      </div>
+
+
+      <Button color="primary" variant="flat" onClick={() => dispatch(logout())}>
+        Выйти
+      </Button>
+
+    </div>
+
   )
 }
 

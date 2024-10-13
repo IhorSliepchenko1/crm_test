@@ -4,17 +4,14 @@ import AppRouter from "../../http/routes";
 
 export const fetchExpensesSlice = createAsyncThunk(
      "expenses/fetchExpensesSlice ",
-     async ({ limit, page, from, to }, { rejectWithValue }) => {
+     async (page, { rejectWithValue }) => {
           try {
                const response = await axios.get(AppRouter.expenses, {
                     headers: {
                          "Content-Type": "application/json",
                     },
                     params: {
-                         limit,
-                         page,
-                         from,
-                         to
+                         page
                     },
                });
 

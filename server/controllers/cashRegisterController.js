@@ -1,6 +1,6 @@
 const ApiError = require(`../error/ApiError`);
 const { CashRegister } = require(`../models/models`);
-const { Op } = require(`sequelize`);
+// const { Op } = require(`sequelize`);
 // const checkDate = await CashRegister.findOne({ where: { date } });
 
 // if (checkDate) {
@@ -27,12 +27,11 @@ class CashRegisterController {
 
       const userId = req.user.id;
       const totalCash = cash + (cashless - (cashless / 100) * 1.3);
-      const formattedDate = new Date(date).toISOString().split('T')[0];
 
       const cashRegister = await CashRegister.create({
         cash,
         cashless,
-        date: formattedDate,
+        date,
         totalCash,
         userId,
       });
@@ -43,33 +42,17 @@ class CashRegisterController {
     }
   }
   async getAll(req, res, next) {
-    let { limit, page, from, to } = req.query;
+    let { limit, page } = req.query;
 
     try {
       page = page || 1;
       limit = limit || 20;
       let offset = page * limit - limit;
-      let data;
 
-      if (!from || !to) {
-        data = await CashRegister.findAndCountAll({
-          limit,
-          offset,
-        });
-      }
-
-      if (from && to) {
-        data = await CashRegister.findAndCountAll({
-          where: {
-            date: {
-              [Op.between]: [new Date(from + 'T00:00:00Z'), new Date(to + 'T23:59:59Z')],
-            },
-          },
-          limit,
-          offset,
-        });
-      }
-
+      const data = await CashRegister.findAndCountAll({
+        limit,
+        offset,
+      });
 
       return res.status(200).json(data);
     } catch (error) {

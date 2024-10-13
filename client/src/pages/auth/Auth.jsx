@@ -1,25 +1,33 @@
-import { useState } from 'react'
 import './Auth.scss'
-import { useHandleChange } from '../../hooks/useHandleChange'
-import Login from '../../components/inputs/login/login'
-import Password from '../../components/inputs/password/password'
-import { useDispatch, useSelector } from 'react-redux'
+import { useDispatch } from 'react-redux'
 import { fetchLogin } from '../../features/user/loginSlice'
 import { fetchAuth } from '../../features/user/authSlice'
 import { useNavigate } from 'react-router-dom'
-import Error from '../../components/error'
-
+import { useTheme } from '../../theme'
+import { CiDark } from "react-icons/ci";
+import { CiLight } from "react-icons/ci";
+import { Button } from "@nextui-org/react";
+import { useForm } from "react-hook-form"
+import { CustomInput } from '../../components/input'
 
 const Auth = () => {
-     const [data, setData] = useState({ login: ``, password: `` })
-     const { handleChange } = useHandleChange(data, setData)
+     const {
+          handleSubmit,
+          control,
+          formState: { errors },
+     } = useForm({
+          mode: "onChange",
+          reValidateMode: "onBlur",
+          defaultValues: {
+               login: "",
+               password: "",
+          },
+     })
 
      const dispatch = useDispatch()
-     const { error } = useSelector((state) => state.login)
-
      const navigate = useNavigate()
 
-     const login = async () => {
+     const onSubmit = async (data) => {
           try {
                const loginResponse = await dispatch(fetchLogin(data)).unwrap();
                await dispatch(fetchAuth(`Bearer ${loginResponse}`)).unwrap();
@@ -29,24 +37,44 @@ const Auth = () => {
           }
      };
 
+     const { theme, toggleTheme } = useTheme();
 
 
      return (
-          <form onSubmit={(e) => {
-               e.preventDefault()
-               login();
-          }} className='form-auth'>
-               <div className='input-container'>
-                    <Login handleChange={handleChange} name="login" />
-                    <Password handleChange={handleChange} name="password" />
+          <>
+               <div className="flex justify-end cursor-pointer" onClick={toggleTheme}>
+                    {theme === `light` ? <CiLight /> : <CiDark />}
                </div>
-               {error && <Error message={`Ошибка входа`} />}
+               <form onSubmit={handleSubmit(onSubmit)} className='form-auth'>
 
-               <div className='btn-container'>
-                    <button type='submit' className='btn-login'>Войти</button>
+                    <div className="flex w-full flex-wrap md:flex-nowrap gap-4">
+                         <CustomInput
+                              control={control}
+                              name="login"
+                              label="Логин"
+                              type="text"
+                              required="Обязательное поле"
+                         />
+                         <CustomInput
+                              control={control}
+                              name="password"
+                              label="Пароль"
+                              type="password"
+                              required="Обязательное поле"
+                         />
+                    </div>
 
-               </div>
-          </form>
+                    {errors.exampleRequired && <span>This field is required</span>}
+
+
+
+                    <div className='flex justify-end mt-3 w-full'>
+                         <Button color="primary" type='submit' >
+                              Войти
+                         </Button>
+                    </div>
+
+               </form></>
      )
 
 }
