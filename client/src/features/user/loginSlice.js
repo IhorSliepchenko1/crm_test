@@ -8,8 +8,9 @@ export const fetchLogin = createAsyncThunk(
      async (data, { rejectWithValue }) => {
           try {
                const response = await axios.post(AppRouter.login, data, headers);
+               console.log(response);
 
-               return response.data;
+               return response.data.token;
           } catch (error) {
                return rejectWithValue(
                     error.response ? error.response.data : error.message
@@ -38,7 +39,7 @@ export const loginSlice = createSlice({
 
                .addCase(fetchLogin.fulfilled, (state, action) => {
                     state.status = "succeeded";
-                    state.user = action.payload;
+                    state.token = `Bearer ${action.payload}`;
                     localStorage.setItem("token", JSON.stringify(`Bearer ${action.payload}`));
                })
 

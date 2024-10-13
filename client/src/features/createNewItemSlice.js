@@ -9,7 +9,7 @@ export const fetchCreateNewItem = createAsyncThunk(
                const response = await axios.post(url, data, {
                     headers: {
                          "Content-Type": contentType,
-                         "Autorization": token
+                         "Authorization": token
                     },
                });
 
@@ -48,8 +48,9 @@ export const createNewItemSlice = createSlice({
                     state.status = "succeeded";
                })
 
-               .addCase(fetchCreateNewItem.rejected, (state) => {
+               .addCase(fetchCreateNewItem.rejected, (state, action) => {
                     state.status = "failed";
+                    state.error = action.payload;
                });
      },
 });

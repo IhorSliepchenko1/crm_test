@@ -1,4 +1,4 @@
-import Login from "./pages/Login"
+// import Login from "./pages/Login"
 
 
 const App = () => {
@@ -6,7 +6,7 @@ const App = () => {
 
   return (
     <>
-      <Login />
+      {/* <Login /> */}
     </>
 
   )

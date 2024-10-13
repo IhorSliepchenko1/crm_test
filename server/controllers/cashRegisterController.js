@@ -1,6 +1,19 @@
 const ApiError = require(`../error/ApiError`);
 const { CashRegister } = require(`../models/models`);
 const { Op } = require(`sequelize`);
+// const checkDate = await CashRegister.findOne({ where: { date } });
+
+// if (checkDate) {
+//   return next(ApiError.badRequest(`Сегодня уже вносили кассу`));
+// }
+
+// const today = new Date(Date.now()).toLocaleDateString();
+
+// if (date > today) {
+//   return next(
+//     ApiError.badRequest(`Кассу можно внести только за сегодня`)
+//   );
+// }
 
 class CashRegisterController {
   async deposit(req, res, next) {
@@ -11,27 +24,15 @@ class CashRegisterController {
         return next(ApiError.notFound(`Заполните все поля!`));
       }
 
-      const checkDate = await CashRegister.findOne({ where: { date } });
-
-      if (checkDate) {
-        return next(ApiError.badRequest(`Сегодня уже вносили кассу`));
-      }
-
-      const today = new Date(Date.now()).toLocaleDateString();
-
-      if (date > today) {
-        return next(
-          ApiError.badRequest(`Кассу можно внести только за сегодня`)
-        );
-      }
 
       const userId = req.user.id;
       const totalCash = cash + (cashless - (cashless / 100) * 1.3);
+      const formattedDate = new Date(date).toISOString().split('T')[0];
 
       const cashRegister = await CashRegister.create({
         cash,
         cashless,
-        date,
+        date: formattedDate,
         totalCash,
         userId,
       });
@@ -43,8 +44,6 @@ class CashRegisterController {
   }
   async getAll(req, res, next) {
     let { limit, page, from, to } = req.query;
-
-    console.log(limit, page, from, to);
 
     try {
       page = page || 1;
@@ -63,14 +62,14 @@ class CashRegisterController {
         data = await CashRegister.findAndCountAll({
           where: {
             date: {
-              // YYYY-MM-DD
-              [Op.between]: [from, to],
+              [Op.between]: [new Date(from + 'T00:00:00Z'), new Date(to + 'T23:59:59Z')],
             },
           },
           limit,
           offset,
         });
       }
+
 
       return res.status(200).json(data);
     } catch (error) {

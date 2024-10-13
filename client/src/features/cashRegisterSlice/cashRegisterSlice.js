@@ -4,14 +4,13 @@ import AppRouter from "../../http/routes";
 
 export const fetchCashRegisterSlice = createAsyncThunk(
      "cashRegister/fetchCashRegisterSlice ",
-     async ({ limit, page, from, to }, { rejectWithValue }) => {
+     async ({ page, from, to }, { rejectWithValue }) => {
           try {
                const response = await axios.get(AppRouter.cashRegister, {
                     headers: {
                          "Content-Type": "application/json",
                     },
                     params: {
-                         limit,
                          page,
                          from,
                          to
@@ -19,7 +18,7 @@ export const fetchCashRegisterSlice = createAsyncThunk(
                });
 
 
-               return response.data.rows
+               return response.data
           } catch (error) {
                return rejectWithValue(
                     error.response ? error.response.data : error.message

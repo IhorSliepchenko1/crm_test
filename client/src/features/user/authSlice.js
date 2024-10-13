@@ -9,11 +9,12 @@ export const fetchAuth = createAsyncThunk(
                const response = await axios.get(AppRouter.auth, {
                     headers: {
                          "Content-Type": "application/json",
-                         "Autorization": token
+                         "Authorization": token
                     },
                });
 
-               return response.data
+
+               return response.data.token
           } catch (error) {
                return rejectWithValue(
                     error.response ? error.response.data : error.message
@@ -25,21 +26,21 @@ export const fetchAuth = createAsyncThunk(
 export const authSlice = createSlice({
      name: "auth",
      initialState: {
-          user: null,
+          token: JSON.parse(localStorage.getItem("token")),
           status: "idle",
           error: null,
      },
 
      reducers: {
-          logout: () => {
-               localStorage.removeItem(`token`)
+          logout: (state) => {
+               localStorage.removeItem(`token`);
+               state.token = null;
                location.reload()
           }
      },
 
      extraReducers: (builder) => {
           builder
-
                .addCase(fetchAuth.pending, (state) => {
                     state.status = "loading";
                     state.error = null;
@@ -47,8 +48,8 @@ export const authSlice = createSlice({
 
                .addCase(fetchAuth.fulfilled, (state, action) => {
                     state.status = "succeeded";
-                    state.user = action.payload;
-                    // localStorage.setItem("token", JSON.stringify(`Bearer ${action.payload}`));
+                    state.token = `Bearer ${action.payload}`;
+                    localStorage.setItem("token", JSON.stringify(`Bearer ${action.payload}`));
                })
 
                .addCase(fetchAuth.rejected, (state, action) => {

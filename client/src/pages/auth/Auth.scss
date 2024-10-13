@@ -1,0 +1,27 @@
+.form-auth {
+     max-width: 500px;
+     margin: 100px auto;
+     border-radius: 5px;
+}
+
+.btn-container {
+     display: flex;
+     margin-top: 20px;
+
+}
+
+.btn-login {
+     background-color: rgb(41, 155, 248);
+     color: white;
+     border-radius: 5px;
+     cursor: pointer;
+     max-width: 90%;
+     margin: auto;
+     width: 100%;
+     padding: 2px;
+     transition: .2s ease-in-out;
+
+     &:hover {
+          background-color: rgb(41, 107, 248);
+     }
+}

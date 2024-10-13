@@ -11,7 +11,7 @@ export const fetchUpdate = createAsyncThunk(
                const response = await axios.put(url, data, {
                     headers: {
                          "Content-Type": "application/json",
-                         "Autorization": token
+                         "Authorization": token
                     },
                });
 
@@ -45,8 +45,9 @@ export const updateSlice = createSlice({
                     state.status = "succeeded";
                })
 
-               .addCase(fetchUpdate.rejected, (state) => {
+               .addCase(fetchUpdate.rejected, (state, action) => {
                     state.status = "failed";
+                    state.error = action.payload;
                });
      },
 });

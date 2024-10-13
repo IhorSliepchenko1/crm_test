@@ -11,7 +11,7 @@ export const fetchDelete = createAsyncThunk(
                const response = await axios.delete(url, {
                     headers: {
                          "Content-Type": "application/json",
-                         "Autorization": token
+                         "Authorization": token
                     },
                });
 
@@ -45,8 +45,9 @@ export const deleteSlice = createSlice({
                     state.status = "succeeded";
                })
 
-               .addCase(fetchDelete.rejected, (state) => {
+               .addCase(fetchDelete.rejected, (state, action) => {
                     state.status = "failed";
+                    state.error = action.payload;
                });
      },
 });

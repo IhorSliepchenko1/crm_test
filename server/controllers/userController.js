@@ -31,7 +31,9 @@ class UserController {
 
       const hashPassword = await bcrypt.hash(password, 12);
       const user = await User.create({ login, password: hashPassword, role });
-      return res.json(user);
+      const token = generateJwt(user.id, user.login, user.role);
+
+      return res.json({ token });
     } catch (error) {
       next(ApiError.internal(error.message));
     }
@@ -59,17 +61,18 @@ class UserController {
 
       const token = generateJwt(user.id, user.login, user.role);
 
-      return res.json(token);
+      return res.json({ token });
     } catch (error) {
       res.json(error.message);
       next(ApiError.internal(error.message));
     }
   }
 
-  async current(req, res, next) {
+  async check(req, res, next) {
     try {
-      const user = req.user
-      res.json(user);
+      const token = generateJwt(req.user.id, req.user.login, req.user.role);
+
+      return res.json({ token });
     } catch (error) {
       next(ApiError.internal(error.message));
     }
