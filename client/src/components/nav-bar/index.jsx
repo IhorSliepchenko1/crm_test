@@ -10,29 +10,29 @@ const NavBar = () => {
 
 
 
-    <div className='flex items-center justify-between header'>
-      <div className='nav'>
-        <NavLink to="/">
-          Касса
-        </NavLink>
-
-
-        <NavLink to="/expenses">
-          Расходы
-        </NavLink>
-
-        <NavLink to="/register">
-          Регистрация
-        </NavLink>
-
-      </div>
-
-
+    <nav className='flex items-center justify-between header'>
+      <ul className='ul'>
+        <li>
+          <NavLink to="/">
+            Касса
+          </NavLink>
+        </li>
+        <li>
+          <NavLink to="/expenses">
+            Расходы
+          </NavLink>
+        </li>
+        <li>
+          <NavLink to="/register">
+            Регистрация
+          </NavLink>
+        </li>
+      </ul>
       <Button color="primary" variant="flat" onClick={() => dispatch(logout())}>
         Выйти
       </Button>
 
-    </div>
+    </nav>
 
   )
 }

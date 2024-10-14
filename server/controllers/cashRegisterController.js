@@ -18,22 +18,23 @@ const { CashRegister } = require(`../models/models`);
 class CashRegisterController {
   async deposit(req, res, next) {
     const { cash, cashless, date } = req.body;
+    const { id } = req.user
+    console.log(id, cash, cashless, date);
 
     try {
-      if (!cash || !cashless || !date) {
+      if (cash < 0 || cashless < 0 || !date) {
         return next(ApiError.notFound(`Заполните все поля!`));
       }
 
 
-      const userId = req.user.id;
-      const totalCash = cash + (cashless - (cashless / 100) * 1.3);
+      const totalCash = +cash + (+cashless - (+cashless / 100) * 1.3);
 
       const cashRegister = await CashRegister.create({
         cash,
         cashless,
         date,
         totalCash,
-        userId,
+        userId: id,
       });
 
       return res.status(200).json(cashRegister);

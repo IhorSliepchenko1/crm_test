@@ -64,7 +64,7 @@ const Auth = () => {
                          />
                     </div>
 
-                    {errors.exampleRequired && <span>This field is required</span>}
+                    {errors.exampleRequired && <span>Ошибка</span>}
 
 
 

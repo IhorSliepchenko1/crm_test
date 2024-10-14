@@ -4,7 +4,7 @@
 
 
 main {
-     height: 100vh;
+     min-height: 100vh;
 }
 
 
@@ -16,7 +16,7 @@ th {
      text-align: center !important;
 }
 
-.nav {
+.ul {
      display: flex;
      width: 250px;
      justify-content: space-between;
@@ -39,4 +39,9 @@ th {
 
 table {
      max-width: 600px !important;
+}
+
+.table-container {
+     max-width: 1500px;
+     margin-inline: auto;
 }
