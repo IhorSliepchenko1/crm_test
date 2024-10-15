@@ -19,7 +19,6 @@ class CashRegisterController {
   async deposit(req, res, next) {
     const { cash, cashless, date } = req.body;
     const { id } = req.user
-    console.log(id, cash, cashless, date);
 
     try {
       if (cash < 0 || cashless < 0 || !date) {
@@ -27,11 +26,17 @@ class CashRegisterController {
       }
 
 
+      const checkDudleDate = await CashRegister.findOne({ where: { date: `${date}T00:00:00.000Z` } })
+
+      if (checkDudleDate) {
+        return res.status(400).json({ error: `За эту дату касса внесена!` });
+      }
+
       const totalCash = +cash + (+cashless - (+cashless / 100) * 1.3);
 
       const cashRegister = await CashRegister.create({
         cash,
-        cashless,
+        cashless: (+cashless - (+cashless / 100) * 1.3),
         date,
         totalCash,
         userId: id,
@@ -53,6 +58,7 @@ class CashRegisterController {
       const data = await CashRegister.findAndCountAll({
         limit,
         offset,
+        order: [['date', 'DESC']],
       });
 
       return res.status(200).json(data);
@@ -65,7 +71,7 @@ class CashRegisterController {
     const { cash, cashless, date } = req.body;
 
     try {
-      const totalCash = cash + (cashless - (cashless / 100) * 1.3);
+      const totalCash = +cash + (+cashless - (+cashless / 100) * 1.3);
 
       const cashRegisterUpdate = await CashRegister.update(
         {

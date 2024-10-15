@@ -21,13 +21,14 @@ export const CustomInput = ({
                required,
           },
      })
+
      return (
           <Input
                id={name}
                label={label}
                type={type}
                placeholder={placeholder}
-               value={field.value}
+               value={field.value ?? ''}
                name={field.name}
                isInvalid={invalid}
                onChange={field.onChange}

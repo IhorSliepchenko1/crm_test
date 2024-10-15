@@ -1,200 +1,136 @@
 import { useState, useMemo, useEffect } from 'react'
-import { Table, TableHeader, TableColumn, TableBody, TableRow, TableCell, Pagination, Button } from "@nextui-org/react";
+import { Table, TableHeader, TableColumn, TableBody, TableRow, TableCell, Pagination, Button, useDisclosure } from "@nextui-org/react";
 import { Spinner } from "@nextui-org/spinner";
 import { useDispatch, useSelector } from 'react-redux'
 import { fetchCashRegisterSlice } from '../../features/cashRegisterSlice/cashRegisterSlice';
 import { AiFillEdit } from "react-icons/ai";
 import { FaRegTrashAlt } from "react-icons/fa";
-import { Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, useDisclosure } from "@nextui-org/react";
-import { CustomInput } from '../../components/input'
-import { useForm } from "react-hook-form"
-// import { fetchCreateNewItem } from '../../features/createNewItemSlice';
-// import AppRouter from '../../http/routes';
-import { fetchDelete } from '../../features/deleteSlice';
+import DepositCashRegister from '../../components/depositCashRegister/index';
+import UpdateCashRegister from '../../components/updateCashRegister/index';
+import { useDate } from '../../hooks/useDate';
+import DeleteCashRegister from '../../components/deleteCashRegister';
 
 
 const CashRegister = () => {
-
-     const {
-          handleSubmit,
-          control,
-          formState: { errors },
-          reset
-     } = useForm({
-          mode: "onChange",
-          reValidateMode: "onBlur",
-          defaultValues: {
-               cash: null,
-               cashless: null,
-               date: new Date(Date.now()).toISOString().split('T')[0]
-          },
-     })
-
      const dispatch = useDispatch();
      const state = useSelector((state) => state);
+
      const [page, setPage] = useState(1);
-     const { isOpen, onOpen, onOpenChange } = useDisclosure();
+     const { validDate } = useDate()
+     const [modalVariant, setModalVariant] = useState(0)
+     const [selectedData, setSelectedData] = useState({
+          id: 0,
+          cash: 0,
+          cashless: 0,
+          date: new Date(Date.now()),
+     });
 
-     // const onSubmit = async (data) => {
-     //      console.log(data);
-
-     //      try {
-     //           const reqData = { cash: +data.cash, cashless: +data.cashless, date: data.date }
-
-     //           await dispatch(fetchCreateNewItem({ url: AppRouter.cashRegisterDeposit, name: "cash", data: reqData, token: state.auth.token })).unwrap();
-     //           dispatch(fetchCashRegisterSlice({ page: page }));
-     //           reset();
-     //           onOpenChange();
-
-     //      } catch (err) {
-     //           console.error("Ошибка:", err);
-     //      }
-     // };
+     const { onOpen, isOpen, onOpenChange } = useDisclosure()
 
      useEffect(() => {
           dispatch(fetchCashRegisterSlice({ page: page }));
-
-     }, [dispatch, page, onOpen]);
+     }, [dispatch, page]);
 
      const pages = Math.ceil(state.cashRegister.data.count / 20);
      const items = useMemo(() => state.cashRegister.data.rows || [], [state.cashRegister.data.rows]);
 
 
-     const fetchDel = async (id) => {
-          try {
-               await dispatch(fetchDelete({ name: `cash`, id, token: state.auth.token })).unwrap();
-               dispatch(fetchCashRegisterSlice({ page: page }));
-
-          } catch (err) {
-               console.error("Ошибка:", err);
-          }
+     const openDeposit = () => {
+          setModalVariant(0)
+          setModalVariant(1)
+          onOpen()
      }
-
-     const fetchUpdate = (data) => {
-
-          async (id) => {
-               try {
-                    const reqData = { cash: +data.cash, cashless: +data.cashless, date: data.date }
-
-                    await dispatch(fetchUpdate({ name: `cash`, id, data: reqData, token: state.auth.token })).unwrap();
-                    dispatch(fetchCashRegisterSlice({ page: page }));
-                    reset();
-                    onOpenChange();
-               }
-               catch (err) {
-                    console.error("Ошибка:", err);
-               }
-          }
+     const openUpdate = () => {
+          setModalVariant(0)
+          setModalVariant(2)
+          onOpen()
      }
-
+     const openDelete = () => {
+          setModalVariant(0)
+          setModalVariant(3)
+          onOpen()
+     }
 
 
      return (
           <div>
-
                <div className='table-container'>
                     <div className='flex flex-col btn'>
-                         <Button color="success" onPress={onOpen}>
+                         <Button color="success" onPress={openDeposit}>
                               Внести кассу
                          </Button>
-
                     </div>
 
-                    {state.status === `loading` ? <Spinner /> :
+                    <Table
+                         bottomContent={
+                              pages > 0 ? (
+                                   <div className="flex justify-center">
+                                        <Pagination
+                                             isCompact
+                                             showControls
+                                             showShadow
+                                             color="primary"
+                                             page={page}
+                                             total={pages}
+                                             onChange={(page) => setPage(page)}
+                                        />
+                                   </div>
+                              ) : null
+                         }
+                    >
+                         <TableHeader>
+                              <TableColumn key="date">Дата</TableColumn>
+                              <TableColumn key="cash">Наличные</TableColumn>
+                              <TableColumn key="cashless">Безналичные</TableColumn>
+                              <TableColumn key="totalCash">Сумма</TableColumn>
+                              <TableColumn >Изменить / Удалить</TableColumn>
+                         </TableHeader>
 
-                         <Table
-                              bottomContent={
-                                   pages > 0 ? (
-                                        <div className="flex justify-center">
-                                             <Pagination
-                                                  isCompact
-                                                  showControls
-                                                  showShadow
-                                                  color="primary"
-                                                  page={page}
-                                                  total={pages}
-                                                  onChange={(page) => setPage(page)}
-                                             />
-                                        </div>
-                                   ) : null
-                              }
+                         <TableBody
+                              loadingContent={<Spinner label="Loading..." color="warning" />}
+                              loadingState={state.cashRegister.status === "loading" ? "loading" : "idle"}
                          >
-                              <TableHeader>
-                                   <TableColumn key="date">Дата</TableColumn>
-                                   <TableColumn key="cash">Наличные</TableColumn>
-                                   <TableColumn key="cashless">Безналичные</TableColumn>
-                                   <TableColumn key="totalCash">Сумма</TableColumn>
-                                   <TableColumn >Изменить / Удалить</TableColumn>
-                              </TableHeader>
+                              {items.map((item) => (
+                                   <TableRow key={item.id}>
+                                        <TableCell>{validDate(item.date).defaultDate}</TableCell>
+                                        <TableCell>{item.cash}</TableCell>
+                                        <TableCell>{item.cashless}</TableCell>
+                                        <TableCell>{item.totalCash}</TableCell>
+                                        <TableCell className='btn-container'>
 
-                              <TableBody>
-                                   {items.map((item) => (
-                                        <TableRow key={item.id}>
-                                             <TableCell>{item.date.split(`T`)[0].split(`-`).reverse().join(`.`)}</TableCell>
-                                             <TableCell>{item.cash}</TableCell>
-                                             <TableCell>{item.cashless}</TableCell>
-                                             <TableCell>{item.totalCash}</TableCell>
-                                             <TableCell className='btn-container'>
+                                             <div onClick={() => {
+                                                  setSelectedData((prev) => ({ ...prev, cashless: +item.cashless, cash: +item.cash, date: validDate(item.date).calendar, id: item.id }))
+                                                  openUpdate()
+                                             }}>
+                                                  <AiFillEdit className='cursor-pointer' />
+                                             </div>
 
-                                                  <Button onPress={onOpen}>
-                                                       <AiFillEdit className='cursor-pointer' />
-                                                  </Button>
-                                                  <div onClick={() => fetchDel(item.id)}>
-                                                       <FaRegTrashAlt className='cursor-pointer' />
-                                                  </div>
+                                             <div onClick={() => {
+                                                  setSelectedData((prev) => ({ ...prev, id: item.id }))
+                                                  openDelete()
+                                             }}>
+                                                  <FaRegTrashAlt className='cursor-pointer' />
+                                             </div>
 
 
-                                             </TableCell>
-                                        </TableRow>
-                                   ))}
-                              </TableBody>
-                         </Table>}
+                                        </TableCell>
+                                   </TableRow>
+                              ))}
+                         </TableBody>
+                    </Table>
                </div>
-               <Modal
-                    isOpen={isOpen}
-                    onOpenChange={onOpenChange}
-                    placement="top-center"
-               >
-                    <ModalContent>
-                         {(onClose) => (
-                              <>
-                                   <form onSubmit={handleSubmit(fetchUpdate)}>
-                                        <ModalHeader className="flex flex-col gap-1">Внести кассу</ModalHeader>
-                                        <ModalBody>
 
-                                             <CustomInput name="cash"
-                                                  label="Наличные"
-                                                  type="number"
-                                                  control={control}
-                                                  required="Обязательное поле" />
+               {
 
-                                             <CustomInput name="cashless"
-                                                  label="Безналичне"
-                                                  type="number"
-                                                  control={control}
-                                                  required="Обязательное поле" />
+                    modalVariant === 3 ? <DeleteCashRegister isOpen={isOpen} onOpenChange={onOpenChange} page={page} id={selectedData.id} /> :
+                         modalVariant === 1
+                              ? <DepositCashRegister isOpen={isOpen} page={page} onOpenChange={onOpenChange} data={selectedData} />
+                              : <UpdateCashRegister isOpen={isOpen} page={page} onOpenChange={onOpenChange} id={selectedData.id} data={selectedData} />
+               }
 
-                                             <CustomInput name="date"
-                                                  label="Дата"
-                                                  type="date"
-                                                  control={control}
-                                                  required="Обязательное поле" />
 
-                                             {errors.exampleRequired && <span>Ошибка</span>}
-                                        </ModalBody>
-                                        <ModalFooter className='flex justify-between'>
-                                             <Button color="primary" type='submit'>
-                                                  Внести
-                                             </Button>
-                                             <Button color="danger" variant="flat" onPress={onClose}>
-                                                  Отмена
-                                             </Button>
-                                        </ModalFooter></form>
-                              </>
-                         )}
-                    </ModalContent>
-               </Modal>
-          </div >
+
+          </div>
 
 
      );

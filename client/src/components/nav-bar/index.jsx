@@ -1,15 +1,15 @@
 import { useDispatch } from 'react-redux';
-import { Button } from "@nextui-org/react";
 import { logout } from '../../features/user/authSlice';
 import { NavLink } from 'react-router-dom';
+import { useTheme } from '../../theme'
+import { CiDark } from "react-icons/ci";
+import { CiLight } from "react-icons/ci";
+import { AiOutlinePoweroff } from "react-icons/ai";
 
 const NavBar = () => {
   const dispatch = useDispatch()
-
+  const { theme, toggleTheme } = useTheme();
   return (
-
-
-
     <nav className='flex items-center justify-between header'>
       <ul className='ul'>
         <li>
@@ -28,10 +28,12 @@ const NavBar = () => {
           </NavLink>
         </li>
       </ul>
-      <Button color="primary" variant="flat" onClick={() => dispatch(logout())}>
-        Выйти
-      </Button>
-
+      <div className='flex items-center gap-4'>
+        <div className="flex justify-end cursor-pointer" onClick={toggleTheme}>
+          {theme === `light` ? <CiLight /> : <CiDark />}
+        </div>
+        <AiOutlinePoweroff className='cursor-pointer'  onClick={() => dispatch(logout())} />
+      </div>
     </nav>
 
   )
