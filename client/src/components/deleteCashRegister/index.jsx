@@ -4,6 +4,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { fetchCashRegisterSlice } from "../../features/cashRegisterSlice/cashRegisterSlice";
 
 const DeleteCashRegister = ({ isOpen, onOpenChange, page, id }) => {
+     const dispatch = useDispatch();
+     const state = useSelector((state) => state);
 
      const fetchDel = async () => {
           try {
@@ -16,17 +18,13 @@ const DeleteCashRegister = ({ isOpen, onOpenChange, page, id }) => {
           }
      }
 
-     const dispatch = useDispatch();
-     const state = useSelector((state) => state);
-
      return (
           <Modal isOpen={isOpen} onOpenChange={onOpenChange}  >
                <ModalContent>
                     {(onClose) => (
                          <>
-                              <ModalHeader className="flex flex-col gap-1">Уверены что хотите удалить?</ModalHeader>
-
-                              <ModalFooter>
+                              <ModalHeader className="flex justify-center">Уверены что хотите удалить?</ModalHeader>
+                              <ModalFooter className="flex justify-between">
                                    <Button color="primary" onPress={fetchDel}>
                                         Удалить
                                    </Button>

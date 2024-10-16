@@ -1,9 +1,9 @@
 import { createBrowserRouter } from "react-router-dom";
-import Auth from "./pages/auth/Auth";
+import Auth from "./pages/auth/index";
 import Layout from "./components/layout";
-import Expenses from "./pages/expenses/Expenses";
-import CashRegister from "./pages/cashRegister/CashRegister";
-import Registration from "./pages/registration/Registration";
+import Expenses from "./pages/expenses/index";
+import CashRegister from "./pages/cashRegister/index";
+import Registration from "./pages/registration/index";
 import { RouterProvider } from "react-router-dom"
 import { useTheme } from "./theme/index"
 

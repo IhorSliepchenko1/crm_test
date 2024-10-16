@@ -49,8 +49,9 @@ export const cashRegisterSlice = createSlice({
 
                })
 
-               .addCase(fetchCashRegisterSlice.rejected, (state) => {
+               .addCase(fetchCashRegisterSlice.rejected, (state, action) => {
                     state.status = "failed";
+                    state.error = action.payload;
                });
      },
 });

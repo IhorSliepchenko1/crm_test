@@ -29,7 +29,7 @@ class CashRegisterController {
       const checkDudleDate = await CashRegister.findOne({ where: { date: `${date}T00:00:00.000Z` } })
 
       if (checkDudleDate) {
-        return res.status(400).json({ error: `За эту дату касса внесена!` });
+        return next(ApiError.badRequest(`За эту дату касса внесена!`));
       }
 
       const totalCash = +cash + (+cashless - (+cashless / 100) * 1.3);
@@ -102,7 +102,6 @@ class CashRegisterController {
       }
 
       await CashRegister.destroy({ where: { id } });
-      // await deleteId.destroy();
 
       return res.status(200).json(`id: ${id} удалён `);
     } catch (error) {

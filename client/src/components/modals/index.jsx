@@ -1,14 +1,14 @@
 import { Modal, ModalContent, ModalHeader, ModalBody, ModalFooter } from "@nextui-org/react";
 import { CustomInput } from '../input'
 import { Button } from "@nextui-org/react";
+import ErrorMessage from "../error";
 
-
-const Modals = ({ onOpenChange, isOpen, onSubmit, handleSubmit, control, errors, reset, title, data, error, setError }) => {
+const Modals = ({ onOpenChange, isOpen, onSubmit, handleSubmit, control, reset, title, data, error, setError }) => {
 
   const handleClose = () => {
     reset();
     onOpenChange();
-    setError('')
+    setError(``)
   }
 
   return (
@@ -31,7 +31,7 @@ const Modals = ({ onOpenChange, isOpen, onSubmit, handleSubmit, control, errors,
                   required="Обязательное поле"
                   value={data?.cash}
                 />
-                {/* 2378.50 1399.1 */}
+
                 <CustomInput name="cashless"
                   label="Безналичне"
                   type="number"
@@ -46,9 +46,8 @@ const Modals = ({ onOpenChange, isOpen, onSubmit, handleSubmit, control, errors,
                   required="Обязательное поле"
                   value={data?.date} />
 
-                {errors.exampleRequired && <span >Ошибка</span>}
               </ModalBody>
-              {error && <p className="error">{error}</p>}
+              {error && <ErrorMessage error={error} />}
               <ModalFooter className='flex justify-between'>
                 <Button color="primary" type='submit'>
                   Внести

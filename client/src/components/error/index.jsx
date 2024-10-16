@@ -1,8 +1,8 @@
 
-const Error = ({ message }) => {
+const ErrorMessage = ({ error }) => {
      return (
-          <p style={{ color: `red`, paddingLeft: `25px` }}>{message}</p>
+          <p className="text-center" style={{ color: `red` }}>{error}</p>
      )
 }
 
-export default Error
+export default ErrorMessage

@@ -10,7 +10,6 @@ import { useState } from "react";
 const DepositCashRegister = ({ page, isOpen, onOpenChange }) => {
      const { validDate } = useDate()
      const [error, setError] = useState('')
-
      const {
           handleSubmit,
           control,
@@ -30,6 +29,8 @@ const DepositCashRegister = ({ page, isOpen, onOpenChange }) => {
      const dispatch = useDispatch();
      const state = useSelector((state) => state);
 
+
+
      const onSubmit = async (data) => {
 
           try {
@@ -41,13 +42,23 @@ const DepositCashRegister = ({ page, isOpen, onOpenChange }) => {
                onOpenChange();
 
           } catch (err) {
-               setError(err.error)
-               console.error("Ошибка:", err);
+               setError(err.message)
           }
      };
 
      return (
-          <Modals isOpen={isOpen} onOpenChange={onOpenChange} onSubmit={onSubmit} handleSubmit={handleSubmit} control={control} errors={errors} reset={reset} title={`Внести кассу`} error={error} setError={setError} />
+          <Modals
+               isOpen={isOpen}
+               onOpenChange={onOpenChange}
+               onSubmit={onSubmit}
+               handleSubmit={handleSubmit}
+               control={control}
+               errors={errors}
+               reset={reset}
+               title={`Внести кассу`}
+               error={error}
+               setError={setError}
+          />
      )
 }
 

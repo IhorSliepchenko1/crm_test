@@ -1,5 +1,4 @@
-import './Auth.scss'
-import { useDispatch } from 'react-redux'
+import { useDispatch, } from 'react-redux'
 import { fetchLogin } from '../../features/user/loginSlice'
 import { fetchAuth } from '../../features/user/authSlice'
 import { useNavigate } from 'react-router-dom'
@@ -9,6 +8,7 @@ import { CiLight } from "react-icons/ci";
 import { Button } from "@nextui-org/react";
 import { useForm } from "react-hook-form"
 import { CustomInput } from '../../components/input'
+import { useState } from 'react'
 
 const Auth = () => {
      const {
@@ -27,13 +27,15 @@ const Auth = () => {
      const dispatch = useDispatch()
      const navigate = useNavigate()
 
+     const [errorss, setError] = useState(null)
+
      const onSubmit = async (data) => {
           try {
                const loginResponse = await dispatch(fetchLogin(data)).unwrap();
                await dispatch(fetchAuth(`Bearer ${loginResponse}`)).unwrap();
                navigate(`/`);
           } catch (err) {
-               console.error("Ошибка входа:", err);
+               setError(err.message)
           }
      };
 
@@ -64,7 +66,7 @@ const Auth = () => {
                          />
                     </div>
 
-                    {errors.exampleRequired && <span>Ошибка</span>}
+                    {errors && <span>{errorss}</span>}
 
 
 
