@@ -1,0 +1,49 @@
+@import '../../../style/utils/mixins';
+@import '../../../style/utils/vars';
+
+.nav-bar {
+
+     @include tablet {
+          position: fixed;
+          width: 40%;
+          height: 100vh;
+          flex-direction: column;
+          left: 0;
+          top: 0;
+          justify-content: center;
+          transform: translateX(-120%);
+          transition: .2s ease-in-out;
+          background-color: #0f68ce;
+          z-index: 9999;
+          padding-top: 50px;
+     }
+}
+
+.active {
+     @include tablet {
+          transform: translateX(0);
+     }
+}
+
+.burger-button {
+     cursor: pointer;
+     display: none;
+     font-size: 20px;
+
+     @include tablet {
+          display: block;
+     }
+}
+
+.active_btn {
+     @include tablet {
+          font-size: 12px;
+     }
+}
+
+.close {
+     position: absolute;
+     top: 0;
+     right: 0;
+     padding: 10px;
+}
