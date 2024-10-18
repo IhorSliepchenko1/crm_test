@@ -1,5 +1,5 @@
 import { api } from "./api"
-import { User } from "../types"
+// import { User } from "../types"
 
 export const userApi = api.injectEndpoints({
      endpoints: (builder) => ({
@@ -33,7 +33,9 @@ export const userApi = api.injectEndpoints({
                }),
           }),
 
-          check: builder.query<User, void>({
+          check: builder.query<{
+               token: string
+          }, void>({
                query: () => ({
                     url: "user/check",
                     method: "GET",
@@ -47,7 +49,7 @@ export const {
      useLoginMutation,
      useCheckQuery,
      useLazyCheckQuery,
-     
+
 } = userApi
 
 export const { endpoints: { login, register, check } } = userApi

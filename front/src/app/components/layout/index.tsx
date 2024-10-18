@@ -11,8 +11,6 @@ import { useEffect } from "react"
 
 export const Layout = () => {
 
-     // const [burgerBtn, setBurgerBtn] = useState(false)
-
      const isAuthenticated = useSelector(selectIsAuthenticated)
      const navigate = useNavigate()
 
@@ -20,28 +18,33 @@ export const Layout = () => {
           if (!isAuthenticated) {
                navigate(`/auth`)
           }
-     }, [])
+     }, [isAuthenticated, navigate])
 
      const handleBurger = () => {
-          // setBurgerBtn((prev) => !prev)
           const header: HTMLElement | null = document.getElementById("nav");
-
-          if (header) {
-               header.classList.toggle("active");
-          }
-
-          // const menuIcon = document.getElementById("menu");
-          // menuIcon.classList.toggle("_active");
+          header?.classList.toggle("active");
 
           const body = document.body;
           body.classList.toggle("no-scroll");
+
+          body.addEventListener(`click`, (e) => {
+
+               if (e.target instanceof HTMLElement && !e.target.classList.contains('nav-bar')) {
+                    header?.classList.remove("active")
+               }
+
+          })
      }
 
 
      return (
           <>
-               <Header handleBurger={handleBurger} />
+               <Header handleBurger={() => {
+                    handleBurger()
+               }} />
                <Container>
+
+
                     <div className="flex-2">
                          <NavBar handleBurger={handleBurger} />
                     </div>

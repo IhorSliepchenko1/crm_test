@@ -1,19 +1,19 @@
 import { createSlice } from "@reduxjs/toolkit"
-import { User } from "../../app/types"
+// import { User } from "../../app/types"
 import { userApi } from "../../app/services/userApi"
 import { RootState } from "../../app/store"
 
 interface InitialState {
-     user: User | null
+     // user: User | null
      isAuthenticated: boolean
-     current: User | null
-     token?: string
+     // current: string | null
+     token: string | null
 }
 
 const initialState: InitialState = {
-     user: null,
+     // user: null,
      isAuthenticated: false,
-     current: null,
+     token: null,
 }
 
 const slice = createSlice({
@@ -21,9 +21,9 @@ const slice = createSlice({
      initialState,
      reducers: {
           logout: (state) => {
-               state.user = null
+               // state.user = null
                state.isAuthenticated = false
-               state.current = null
+               state.token = null
                localStorage.removeItem(`token`)
           }
 
@@ -36,8 +36,8 @@ const slice = createSlice({
                     state.isAuthenticated = true
                })
                .addMatcher(userApi.endpoints.check.matchFulfilled, (state, action) => {
+                    state.token = action.payload.token
                     state.isAuthenticated = true
-                    state.current = action.payload
                })
           // .addMatcher(
           //      userApi.endpoints.getUserById.matchFulfilled,
@@ -52,5 +52,5 @@ export const { logout } = slice.actions
 export default slice.reducer
 
 export const selectIsAuthenticated = (state: RootState) => state.auth.isAuthenticated
-export const selectCurrent = (state: RootState) => state.auth.current
-export const selectUser = (state: RootState) => state.auth.user
+// export const selectCurrent = (state: RootState) => state.auth.current
+// export const selectUser = (state: RootState) => state.auth.user

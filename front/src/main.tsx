@@ -8,6 +8,7 @@ import { NextUIProvider } from '@nextui-org/react'
 import { Layout } from './app/components/layout'
 import { ThemeProvider } from './theme-provider'
 import { Auth } from './pages/auth'
+import { CashRegister } from './pages/cash-register'
 
 const container = document.getElementById("root")
 
@@ -22,7 +23,7 @@ const router = createBrowserRouter([
     children: [
       {
         path: "",
-        element: <p></p>,
+        element: <CashRegister />,
       },
 
       {
