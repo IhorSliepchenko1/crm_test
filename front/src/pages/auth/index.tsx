@@ -3,6 +3,7 @@ import { Login } from "../../features/user/login"
 import { ToggleTheme } from "../../app/components/toggle-them"
 
 export const Auth = () => {
+
      return (
           <div className="flex items-center justify-center h-screen">
                <div className="absolute top-0 p-4">

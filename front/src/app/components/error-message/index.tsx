@@ -1,6 +1,8 @@
 type Props = {
      error: string
 }
+import { Alert } from 'antd';
+
 export const ErrorMessage = ({ error = `` }: Props) => {
-     return error && <p className="text-red-500 mt-2 mb-5 text-small">{error}</p>
+     return error && <Alert message={error} type="error" showIcon />
 }

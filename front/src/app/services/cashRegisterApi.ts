@@ -1,8 +1,11 @@
-import { CashRegister } from "../types"
+import { CashRegister, Deposit } from "../types"
 import { api } from "./api"
 
-type CashData = {
-     cash: number, cashless: number, date: Date, id: number
+
+type CashRegisterAll = {
+     rows: CashRegister[]
+     count: number
+
 }
 
 export const cahsRegisterApi = api.injectEndpoints({
@@ -11,7 +14,7 @@ export const cahsRegisterApi = api.injectEndpoints({
           // добавление 
           cashRegisterDeposit: builder.mutation<
                CashRegister,
-               { cashData: CashData }
+               Deposit
 
           >({
                query: (cashData) => ({
@@ -23,19 +26,24 @@ export const cahsRegisterApi = api.injectEndpoints({
 
           //получение 
 
-          getAllCashRegister: builder.query<CashRegister[], void>({
-               query: () => ({
-                    url: "cash-register/",
-                    method: "GET",
-               }),
+          getAllCashRegister: builder.query<CashRegisterAll, {
+               page: number,
+               limit: number,
+          }>({
+               query: ({ page,
+                    limit }) => ({
+                         url: "cash-register/",
+                         method: "GET",
+                         params: { page, limit },
+                    }),
           }),
 
           //редактирование 
-          updateCashRegister: builder.mutation<CashRegister, { cashData: CashData }>({
-               query: ({ cashData }) => ({
-                    url: `/cash-register/${cashData.id}`,
+          updateCashRegister: builder.mutation<CashRegister, { data: Deposit, id: number }>({
+               query: ({ data, id }) => ({
+                    url: `/cash-register/${id}`,
                     method: "PUT",
-                    body: cashData,
+                    body: data,
                }),
           }),
 

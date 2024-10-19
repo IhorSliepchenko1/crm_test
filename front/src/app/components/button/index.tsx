@@ -14,6 +14,9 @@ type Props = {
      | "warning"
      | "danger"
      | undefined
+     variant?: "light" | "solid" | "bordered" | "flat" | "faded" | "shadow" | "ghost" | undefined
+     onPress?: (() => void) | undefined
+     disabled?: boolean
 }
 
 export const Button = ({
@@ -23,15 +26,22 @@ export const Button = ({
      type,
      fullWidth,
      color,
+     variant,
+     onPress,
+     disabled
 }: Props) => {
+
+
      return (<NextButton
           startContent={icon}
           size="lg"
           color={color}
-          variant="light"
+          variant={variant ?? `light`}
           className={className}
           type={type}
-          fullWidth={fullWidth} >
+          fullWidth={fullWidth}
+          onPress={onPress}
+          disabled={disabled}>
           {children}
      </NextButton>
      )

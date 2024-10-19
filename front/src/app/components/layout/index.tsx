@@ -8,7 +8,6 @@ import {
 } from "../../../features/user/userSlice"
 import { useEffect } from "react"
 
-
 export const Layout = () => {
 
      const isAuthenticated = useSelector(selectIsAuthenticated)

@@ -44,7 +44,7 @@ export const Login = () => {
                navigate("/")
           } catch (err) {
                if (hasErrorField(err)) {
-                    setError(err.data.error)
+                    setError(err.data.message)
                }
           }
      }

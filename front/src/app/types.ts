@@ -36,3 +36,13 @@ export type Expenses = {
      updatedAt: Date
      typesExpensesId: number
 }
+
+
+export type CashData = {
+     cash: number, cashless: number, date: string | Date, id?: number
+}
+
+
+export type Deposit = {
+     cash: number | null, cashless: number | null, date: Date | string
+}

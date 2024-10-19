@@ -63,7 +63,6 @@ class UserController {
 
       return res.json({ token });
     } catch (error) {
-      res.json(error.message);
       next(ApiError.internal(error.message));
     }
   }

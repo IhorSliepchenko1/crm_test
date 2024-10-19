@@ -6,19 +6,19 @@ type ThemeContaxtType = {
 }
 
 export const ThemeContext = createContext<ThemeContaxtType>({
-     theme: `dark`,
+     theme: `light`,
      toggleTheme: () => null,
 })
 
 export const ThemeProvider = ({ children }: { children: React.ReactNode }) => {
      const storedTheme = localStorage.getItem(`theme`)
-     const currentTheme = storedTheme ? (storedTheme as `dark` | `light`) : `dark`
+     const currentTheme = storedTheme ? (storedTheme as `dark` | `light`) : `light`
 
      const [theme, setTheme] = useState(currentTheme)
 
      const toggleTheme = () => {
           setTheme((prevTheme) => {
-               const newTheme = prevTheme === `light` ? `dark` : `light`
+               const newTheme = prevTheme === `dark` ? `light` : `dark`
                localStorage.setItem(`theme`, newTheme)
                return newTheme
           })

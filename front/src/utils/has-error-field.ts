@@ -1,5 +1,5 @@
 export function hasErrorField(err: unknown): err is {
-     data: { error: string }
+     data: { message: string }
 } {
      return (
           typeof err === `object` &&
@@ -7,6 +7,6 @@ export function hasErrorField(err: unknown): err is {
           `data` in err &&
           typeof err.data === `object` &&
           err.data !== null &&
-          `error` in err.data
+          `message` in err.data
      )
 }

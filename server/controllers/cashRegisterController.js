@@ -21,9 +21,13 @@ class CashRegisterController {
     const { id } = req.user
 
     try {
-      if (cash < 0 || cashless < 0 || !date) {
+      if (cash < 0 || cashless < 0 || !date ) {
         return next(ApiError.notFound(`Заполните все поля!`));
       }
+
+      // if (cash <= 0 && cashless <= 0) {
+      //   return next(ApiError.notFound(`Заполните все поля!`));
+      // }
 
 
       const checkDudleDate = await CashRegister.findOne({ where: { date: `${date}T00:00:00.000Z` } })
@@ -44,6 +48,8 @@ class CashRegisterController {
 
       return res.status(200).json(cashRegister);
     } catch (error) {
+      res.json(error.message);
+
       next(ApiError.internal(error.message));
     }
   }
@@ -56,6 +62,7 @@ class CashRegisterController {
       let offset = page * limit - limit;
 
       const data = await CashRegister.findAndCountAll({
+        page,
         limit,
         offset,
         order: [['date', 'DESC']],
