@@ -1,4 +1,5 @@
 import { Input as NextInput } from "@nextui-org/react"
+// import { useEffect, useState } from "react"
 import { Control, useController } from "react-hook-form"
 
 type Props = {
@@ -30,18 +31,21 @@ export const Input = ({
                required,
           },
      })
+
+
      return (
           <NextInput
                id={name}
                label={label}
                type={type}
                placeholder={placeholder}
-               value={field.value}
+               value={field.value < 0 ? 0 : field.value}
                name={field.name}
                isInvalid={invalid}
                onChange={field.onChange}
                onBlur={field.onBlur}
                errorMessage={`${errors[name]?.message ?? ``}`}
+               min={0}
           />
      )
 }

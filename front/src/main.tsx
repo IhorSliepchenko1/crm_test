@@ -9,6 +9,7 @@ import { Layout } from './app/components/layout'
 import { ThemeProvider } from './theme-provider'
 import { Auth } from './pages/auth'
 import { CashRegister } from './pages/cash-register'
+import { TypeExpenses } from './pages/type-expenses'
 
 const container = document.getElementById("root")
 
@@ -28,7 +29,7 @@ const router = createBrowserRouter([
 
       {
         path: "/expenses",
-        element: <p>expenses</p>,
+        element: <p>d</p>,
       },
       {
         path: "/register",
@@ -36,7 +37,7 @@ const router = createBrowserRouter([
       },
       {
         path: "/type-expenses",
-        element: <p>type-expenses</p>,
+        element: <TypeExpenses />,
       },
     ],
   },
