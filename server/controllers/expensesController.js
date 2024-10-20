@@ -1,6 +1,5 @@
 const ApiError = require(`../error/ApiError`);
-const { Expenses } = require(`../models/models`);
-const { Op } = require(`sequelize`);
+const { Expenses, TypesExpenses, User } = require(`../models/models`);
 const uuid = require(`uuid`);
 const path = require(`path`);
 
@@ -40,34 +39,32 @@ class ExpensesController {
           }
      }
      async getAll(req, res, next) {
-          let { limit, page, from, to } = req.query;
+          let { limit, page } = req.query;
           try {
                page = page || 1;
                limit = limit || 20;
                let offset = page * limit - limit;
-               let data;
 
-               if (!from || !to) {
-                    data = await Expenses.findAndCountAll({
-                         limit,
-                         offset,
-                    });
+               const data = await Expenses.findAndCountAll({
+                    page,
+                    limit,
+                    offset,
+                    order: [['date', 'DESC']],
+               });
+
+               const copyData = { ...data }
+               const arrayResult = { count: copyData.count, rows: [] }
+               for (let i = 0; i < copyData.rows.length; i++) {
+                    const userName = await User.findOne({ where: { id: data.rows[i].userId } });
+                    const typeExpenses = await TypesExpenses.findOne({ where: { id: data.rows[i].typesExpenseId } })
+                    const login = userName ? userName.login : 'Anonymous';
+                    const type = typeExpenses ? typeExpenses.name : 'non-type';
+                    arrayResult.rows.push({ ...copyData.rows[i].dataValues, userName: login, typeName: type });
+
                }
 
-               if (from && to) {
-                    data = await Expenses.findAndCountAll({
-                         where: {
-                              date: {
-                                   // YYYY-MM-DD
-                                   [Op.between]: [from, to],
-                              }, ёё
-                         },
-                         limit,
-                         offset,
-                    });
-               }
 
-               return res.status(200).json(data);
+               return res.status(200).json(arrayResult);
           } catch (error) {
                next(ApiError.internal(error.message));
           }

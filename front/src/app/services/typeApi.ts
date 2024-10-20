@@ -1,6 +1,10 @@
 import { TypesExpenses } from "../types"
 import { api } from "./api"
 
+type NameUpdate = {
+     name: string
+}
+
 export const typeApi = api.injectEndpoints({
      endpoints: (builder) => ({
 
@@ -26,16 +30,16 @@ export const typeApi = api.injectEndpoints({
           }),
 
           //редактирование типа
-          updateType: builder.mutation<TypesExpenses, { typeName: string; id: string }>({
-               query: ({ typeName, id }) => ({
+          updateType: builder.mutation<TypesExpenses, { data: NameUpdate; id: number }>({
+               query: ({ data, id }) => ({
                     url: `/type-expenses/${id}`,
                     method: "PUT",
-                    body: typeName,
+                    body: data,
                }),
           }),
 
           // удаление типа
-          deleteType: builder.mutation<void, string>({
+          deleteType: builder.mutation<void, number>({
                query: (id) => ({
                     url: `/type-expenses/${id}`,
                     method: "DELETE",

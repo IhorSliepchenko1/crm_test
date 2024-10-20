@@ -12,6 +12,16 @@ main {
      &.h-screen {
           height: auto !important;
      }
+
+     table {
+          .px-3 {
+               @include mobile {
+                    padding-left: 0;
+                    padding-right: 0;
+               }
+          }
+     }
+
 }
 
 td,
@@ -29,4 +39,9 @@ th {
      flex-direction: row-reverse;
      justify-content: space-between;
      padding-top: 30px !important;
+}
+
+.img-big-container {
+
+     height: 100%;
 }

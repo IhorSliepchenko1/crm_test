@@ -62,7 +62,7 @@ export const ModalUpdate = ({
      }, [isOpen, cash, cashless, dateProps, reset]);
 
      const [triggerGetAllCashRegisterDeposit] = useLazyGetAllCashRegisterQuery()
-     const [updateUsercashRegisterDeposit, { isLoading }] = useUpdateCashRegisterMutation()
+     const [updateUsercashRegisterDeposit] = useUpdateCashRegisterMutation()
 
 
 
@@ -120,7 +120,6 @@ export const ModalUpdate = ({
                                         fullWidth
                                         color="primary"
                                         type="submit"
-                                        isLoading={isLoading}
                                    >
                                         Обновить
                                    </Button>

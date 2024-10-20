@@ -8,6 +8,6 @@ router.post(`/deposit`, authMiddleware, cashRegisterController.deposit);
 router.get(`/`, cashRegisterController.getAll);
 // +
 router.put(`/:id`, authMiddleware, cashRegisterController.edit);
-router.delete(`/:id`, cashRegisterController.delete);
+router.delete(`/:id`, checkRoleMiddleware(`ADMIN`), cashRegisterController.delete);
 
 module.exports = router;

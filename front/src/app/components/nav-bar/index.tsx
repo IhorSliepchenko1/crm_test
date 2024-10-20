@@ -1,7 +1,7 @@
 import { NavButton } from "../nav-button"
 import { PiCashRegisterFill } from "react-icons/pi";
 import { GiPayMoney } from "react-icons/gi";
-import { FaUsers } from "react-icons/fa";
+// import { FaUsers } from "react-icons/fa";
 import { LuType } from "react-icons/lu";
 import { MdClose } from "react-icons/md";
 
@@ -28,11 +28,11 @@ export const NavBar = ({ handleBurger }: Props) => {
                               Расходы
                          </NavButton>
                     </li>
-                    <li>
+                    {/* <li>
                          <NavButton classProps={`active_btn`} href="register" icon={<FaUsers />}>
                               Пользователи
                          </NavButton>
-                    </li>
+                    </li> */}
                     <li>
                          <NavButton classProps={`active_btn`} href="type-expenses" icon={<LuType />}>
                               Типы расходов

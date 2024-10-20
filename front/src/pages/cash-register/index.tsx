@@ -1,5 +1,5 @@
 import { MdAdd } from "react-icons/md";
-import { Table } from "../../app/components/table";
+import { Table } from "../../app/components/table-cash-register";
 import { useGetAllCashRegisterQuery } from "../../app/services/cashRegisterApi"
 import { useState } from "react";
 import { Button } from "../../app/components/button";

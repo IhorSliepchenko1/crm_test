@@ -10,6 +10,7 @@ import { ThemeProvider } from './theme-provider'
 import { Auth } from './pages/auth'
 import { CashRegister } from './pages/cash-register'
 import { TypeExpenses } from './pages/type-expenses'
+import { Expenses } from './pages/expenses'
 
 const container = document.getElementById("root")
 
@@ -29,12 +30,12 @@ const router = createBrowserRouter([
 
       {
         path: "/expenses",
-        element: <p>d</p>,
+        element: <Expenses />,
       },
-      {
-        path: "/register",
-        element: <p>register</p>,
-      },
+      // {
+      //   path: "/register",
+      //   element: <p>register</p>,
+      // },
       {
         path: "/type-expenses",
         element: <TypeExpenses />,

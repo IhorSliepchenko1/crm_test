@@ -46,3 +46,12 @@ export type CashData = {
 export type Deposit = {
      cash: number | null, cashless: number | null, date: Date | string
 }
+
+export type DecodeToken = {
+     exp: number
+     iat: number
+     id: number
+     login: string
+     role: string
+}
+
