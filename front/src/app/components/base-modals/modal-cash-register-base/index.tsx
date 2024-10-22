@@ -1,72 +1,37 @@
-import { Modal as ModalNext, ModalContent, ModalHeader, ModalBody, ModalFooter } from "@nextui-org/react";
-import { Input } from "../input";
-import { useForm } from "react-hook-form";
-import { ErrorMessage } from "../error-message/index"
-import { hasErrorField } from "../../../utils/has-error-field"
-import { useState } from "react";
-import { useCashRegisterDepositMutation, useLazyGetAllCashRegisterQuery } from "../../services/cashRegisterApi";
-import { Deposit } from "../../types";
-import { Button } from "../button";
-import { useCalendarInputDate } from "../../hooks/useCalendarInputDate";
+import { Modal, ModalContent, ModalHeader, ModalBody, ModalFooter } from "@nextui-org/react";
+import { Input } from "../../input";
+import { Button } from "../../button";
+import { useTheme } from "../../../../theme-provider";
+import { ErrorMessage } from "../../error-message";
+import { Control, UseFormHandleSubmit } from "react-hook-form";
+import { Deposit } from "../../../types";
 
 type Props = {
      isOpen: boolean
-     onOpenChange: () => void
-     page: number
-     limit: number
+     resetInput: () => void
+     control: Control<Deposit>
+     handleSubmit: UseFormHandleSubmit<Deposit>
+     onSubmit: (data: Deposit) => Promise<void>
+     error: string
+     title: string
 }
 
-export const Modal = ({ isOpen, onOpenChange, page, limit }: Props) => {
-
-     const { calendarDate } = useCalendarInputDate()
-     const [error, setError] = useState("")
-
-     const {
-          handleSubmit,
-          control,
-          reset
-     } = useForm<Deposit>({
-          mode: "onChange",
-          reValidateMode: "onBlur",
-          defaultValues: {
-               cash: 0, cashless: 0, date: calendarDate(new Date(Date.now())),
-          },
-     })
-
-     const resetInput = () => {
-          onOpenChange()
-          reset()
-          setError(``)
-     }
-
-     const [triggerGetAllCashRegisterDeposit] = useLazyGetAllCashRegisterQuery()
-     const [cashRegisterDeposit] = useCashRegisterDepositMutation()
+export const ModalCashRegisterBase = ({ isOpen, resetInput, control, handleSubmit, onSubmit, error, title }: Props) => {
+     const { theme } = useTheme()
 
 
-
-     const onSubmit = async (data: Deposit) => {
-          try {
-               await cashRegisterDeposit(data).unwrap()
-               await triggerGetAllCashRegisterDeposit({ page, limit }).unwrap()
-               resetInput()
-
-          } catch (err) {
-
-               if (hasErrorField(err)) {
-                    setError(err.data.message)
-               }
-          }
-     }
      return (
-          <ModalNext
+          <Modal
                isOpen={isOpen}
                onOpenChange={resetInput}
                placement="top-center"
+               className={`${theme} text-foreground-500`}
           >
-               <ModalContent>
+               <ModalContent
+               >
                     {(onClose) => (
                          <><form className="flex flex-col gap-4" onSubmit={handleSubmit(onSubmit)}>
-                              <ModalHeader className="flex flex-col gap-1">Внести кассу</ModalHeader>
+                              <ModalHeader className="flex flex-col gap-1">{title}</ModalHeader>
                               <ModalBody>
 
 
@@ -102,6 +67,6 @@ export const Modal = ({ isOpen, onOpenChange, page, limit }: Props) => {
                          </>
                     )}
                </ModalContent>
-          </ModalNext>
+          </Modal>
      )
 }

@@ -8,13 +8,15 @@ class ExpensesController {
      async deposit(req, res, next) {
           try {
                const { name, date, sum, typesExpenseId } = req.body;
-
                let fileName
 
                if (req.files) {
                     const { img } = req.files
-                    fileName = uuid.v4() + `.jpg`;
-                    img.mv(path.resolve(__dirname, `..`, `static`, fileName));
+                    uuid.v4() + ".jpg"
+                    img.mv(path.resolve(__dirname, '..', 'static', fileName))
+               }
+               else {
+                    fileName = null;
                }
 
 
@@ -75,9 +77,17 @@ class ExpensesController {
                const { id } = req.params;
                const { name, date, sum, typesExpenseId } = req.body;
 
-               const { img } = req.files;
-               let fileName = uuid.v4() + `.jpg`;
-               img.mv(path.resolve(__dirname, `..`, `static`, fileName));
+               let fileName
+
+               if (req.files) {
+                    const { img } = req.files
+                    uuid.v4() + ".jpg"
+                    img.mv(path.resolve(__dirname, '..', 'static', fileName))
+               }
+               else {
+                    fileName = null;
+               }
+
 
                const userId = req.user.id;
 
@@ -86,7 +96,7 @@ class ExpensesController {
                          name: name || undefined,
                          date: date || undefined,
                          sum: sum || undefined,
-                         typesExpenseId: typesExpenseId || undefined,
+                         typesExpenseId: typesExpenseId === `0` ? undefined : typesExpenseId,
                          userId: userId || undefined,
                          img: fileName || undefined
                     },

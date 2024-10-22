@@ -1,19 +1,5 @@
 const ApiError = require(`../error/ApiError`);
 const { CashRegister } = require(`../models/models`);
-// const { Op } = require(`sequelize`);
-// const checkDate = await CashRegister.findOne({ where: { date } });
-
-// if (checkDate) {
-//   return next(ApiError.badRequest(`Сегодня уже вносили кассу`));
-// }
-
-// const today = new Date(Date.now()).toLocaleDateString();
-
-// if (date > today) {
-//   return next(
-//     ApiError.badRequest(`Кассу можно внести только за сегодня`)
-//   );
-// }
 
 class CashRegisterController {
   async deposit(req, res, next) {
@@ -21,14 +7,9 @@ class CashRegisterController {
     const { id } = req.user
 
     try {
-      if (cash < 0 || cashless < 0 || !date ) {
+      if (cash < 0 || cashless < 0 || !date) {
         return next(ApiError.notFound(`Заполните все поля!`));
       }
-
-      // if (cash <= 0 && cashless <= 0) {
-      //   return next(ApiError.notFound(`Заполните все поля!`));
-      // }
-
 
       const checkDudleDate = await CashRegister.findOne({ where: { date: `${date}T00:00:00.000Z` } })
 
@@ -53,7 +34,7 @@ class CashRegisterController {
       next(ApiError.internal(error.message));
     }
   }
-  async getAll(req, res, next) {
+  async getAllPagination(req, res, next) {
     let { limit, page } = req.query;
 
     try {
@@ -73,6 +54,7 @@ class CashRegisterController {
       next(ApiError.internal(error.message));
     }
   }
+
   async edit(req, res, next) {
     const { id } = req.params;
     const { cash, cashless, date } = req.body;

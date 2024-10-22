@@ -8,9 +8,10 @@ import { MdDelete } from "react-icons/md";
 import { MdModeEditOutline } from "react-icons/md";
 import { Tooltip } from 'antd';
 import { useDeleteCashRegisterMutation, useLazyGetAllCashRegisterQuery } from "../../services/cashRegisterApi";
-import { ModalDelete } from "../modal-delete";
-import { ModalUpdate } from "../modal-cash-register-update";
+import { CashRegisterUpdate } from "../cash-register-update";
 import { useCalendarInputDate } from "../../hooks/useCalendarInputDate";
+import { ModalDelete } from "../base-modals/modal-delete";
+import { useLazyGetBalanceQuery } from "../../services/apiBalance";
 
 type Props = {
      data: { rows: CashData[], count: number } | null | undefined
@@ -37,9 +38,23 @@ export const Table = ({ data, limit, isLoading, page, setPage }: Props) => {
 
      const [deleteCashRegister] = useDeleteCashRegisterMutation()
      const [triggerGetAllCashRegisterDeposit] = useLazyGetAllCashRegisterQuery()
+     const [triggerGetAllBalance] = useLazyGetBalanceQuery()
 
      const { token } = useAppSelector((state) => state.auth)
-     const decoded: DecodeToken = jwtDecode(token as string);
+
+     const decoded: DecodeToken = useMemo(() => {
+          if (typeof token === `string`) {
+               return jwtDecode(token);
+          } else {
+               return {
+                    exp: 0,
+                    iat: 0,
+                    id: 0,
+                    login: '',
+                    role: '',
+               }
+          }
+     }, [token])
 
      const { isOpen, onOpen, onOpenChange } = useDisclosure();
 
@@ -49,14 +64,12 @@ export const Table = ({ data, limit, isLoading, page, setPage }: Props) => {
 
      const loadingState = isLoading || data?.rows.length === 0 ? "loading" : "idle";
 
-
-
      const deleteCashRegisterHandler = async (id: number) => {
           await deleteCashRegister(id).unwrap()
           await triggerGetAllCashRegisterDeposit({ page, limit }).unwrap()
+          await triggerGetAllBalance().unwrap()
+
      }
-
-
 
      const showModal = () => {
           setIsModalOpen(true);
@@ -99,7 +112,7 @@ export const Table = ({ data, limit, isLoading, page, setPage }: Props) => {
                          <TableHeader>
                               <TableColumn key="date">Дата</TableColumn>
                               <TableColumn key="cash">Наличные</TableColumn>
-                              <TableColumn key="cashless">Безналичные</TableColumn>
+                              <TableColumn key="cashless">Безналичные (-1.3%)</TableColumn>
                               <TableColumn key="totalCash">Общее</TableColumn>
                               <TableColumn key="edit-delete">Действия</TableColumn>
                          </TableHeader>
@@ -129,7 +142,8 @@ export const Table = ({ data, limit, isLoading, page, setPage }: Props) => {
                                                                  setDataUpdate((prev) => ({ ...prev, cash: +item.cash, cashless: +item.cashless, dateProps: calendarDate(item.date), id: item.id ?? 0 }))
                                                                  onOpen()
                                                             }} />
-                                                       </Tooltip ></>
+                                                       </Tooltip >
+                                                  </>
 
                                              </div> : columnKey === `date` ? formatToClientDate(item.date) : getKeyValue(item, columnKey)
                                         }</TableCell>}
@@ -146,9 +160,10 @@ export const Table = ({ data, limit, isLoading, page, setPage }: Props) => {
                     handleOk={handleOk}
                     handleCancel={handleCancel}
                     isModalOpen={isModalOpen}
-                    date={deleteDay} />
+                    date={deleteDay}
+               />
 
-               <ModalUpdate
+               <CashRegisterUpdate
                     page={page}
                     limit={limit}
                     isOpen={isOpen}

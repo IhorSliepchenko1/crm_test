@@ -1,4 +1,4 @@
-import { Expenses } from "../types"
+import { Expenses, ExpensesData } from "../types"
 import { api } from "./api"
 
 export const expensesApi = api.injectEndpoints({
@@ -7,19 +7,19 @@ export const expensesApi = api.injectEndpoints({
           // добавление 
           expensesDeposit: builder.mutation<
                Expenses,
-               { expensesData: FormData }
+               { expensesBody: FormData }
 
           >({
-               query: (expensesData) => ({
+               query: ({ expensesBody }) => ({
                     url: "expenses/deposit",
                     method: "POST",
-                    body: expensesData,
+                    body: expensesBody,
                }),
           }),
 
           //получение 
 
-          getAllExpenses: builder.query<Expenses[], {
+          getAllExpenses: builder.query<ExpensesData, {
                page: number,
                limit: number,
           }>({
@@ -33,11 +33,11 @@ export const expensesApi = api.injectEndpoints({
 
           //редактирование 
           updateExpenses: builder.mutation<Expenses,
-               { expensesData: FormData, id: number }>({
-                    query: ({ expensesData, id }) => ({
+               { expensesBody: FormData, id: number }>({
+                    query: ({ expensesBody, id }) => ({
                          url: `/expenses/${id}`,
                          method: "PUT",
-                         body: expensesData,
+                         body: expensesBody,
                     }),
                }),
 

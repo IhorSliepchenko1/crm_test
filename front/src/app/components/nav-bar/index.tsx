@@ -39,6 +39,7 @@ export const NavBar = ({ handleBurger }: Props) => {
                          </NavButton>
                     </li>
                </ul>
+               
           </nav>
      )
 }

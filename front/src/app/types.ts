@@ -35,6 +35,14 @@ export type Expenses = {
      createdAt: Date
      updatedAt: Date
      typesExpensesId: number
+     userName: string
+     typeName: string
+
+}
+
+export type ExpensesData = {
+     count: number
+     rows: Expenses[]
 }
 
 
@@ -55,3 +63,8 @@ export type DecodeToken = {
      role: string
 }
 
+export type Balance = {
+     totalCash: number,
+     totalExpenses: number,
+     balance: number
+}

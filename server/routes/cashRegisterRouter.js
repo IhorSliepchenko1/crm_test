@@ -5,7 +5,7 @@ const authMiddleware = require(`../middleware/authMiddleware`);
 const checkRoleMiddleware = require(`../middleware/checkRoleMiddleware`);
 
 router.post(`/deposit`, authMiddleware, cashRegisterController.deposit);
-router.get(`/`, cashRegisterController.getAll);
+router.get(`/`, cashRegisterController.getAllPagination);
 // +
 router.put(`/:id`, authMiddleware, cashRegisterController.edit);
 router.delete(`/:id`, checkRoleMiddleware(`ADMIN`), cashRegisterController.delete);

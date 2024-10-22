@@ -65,7 +65,7 @@ export const TypeExpenses = () => {
                {data?.length === 0 ? <p>Список типов расходов пуст</p> : <div>
                     {
                          data?.map((item) => (
-                              <TypeExpensesForm name={item?.name ?? ''} id={item?.id} />
+                              <TypeExpensesForm name={item?.name ?? ''} id={item?.id} key={item.id} />
                          ))
                     }
                </div>}

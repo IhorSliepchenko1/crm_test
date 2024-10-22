@@ -29,7 +29,9 @@ export const Header = ({ handleBurger }: Props) => {
      }
 
      return (
+
           <Navbar className="max-w-max min-w-full">
+
                <div onClick={() => handleBurger()} className="burger-button">
                     <GiHamburgerMenu />
                </div>
@@ -49,6 +51,9 @@ export const Header = ({ handleBurger }: Props) => {
                          )}
                     </NavbarItem>
                </NavbarContent>
+
+
           </Navbar>
+
      )
 }

@@ -21,7 +21,7 @@ export const ModalDelete = ({
 
                <Modal open={isModalOpen} onOk={() => handleOk(id)} onCancel={handleCancel} okText="Удалить"
                     cancelText="Отмена">
-                    <p className='flex justify-center gap-1'><span>Уверены что хотите удалить кассу за</span> <span style={{ color: `red` }}>{date}</span>?</p>
+                    <p className='flex justify-center gap-1'><span>Уверены что хотите удалить данные за</span><span style={{ color: `red` }}>{date}</span>?</p>
                </Modal>
           </>
      )
