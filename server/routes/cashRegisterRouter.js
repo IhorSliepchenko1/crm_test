@@ -4,7 +4,7 @@ const cashRegisterController = require(`../controllers/cashRegisterController`);
 const authMiddleware = require(`../middleware/authMiddleware`);
 const checkRoleMiddleware = require(`../middleware/checkRoleMiddleware`);
 
-router.post(`/deposit`, authMiddleware, cashRegisterController.deposit);
+router.post(`/deposit`, cashRegisterController.deposit);
 router.get(`/`, cashRegisterController.getAllPagination);
 // +
 router.put(`/:id`, authMiddleware, cashRegisterController.edit);

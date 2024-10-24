@@ -8,13 +8,21 @@ class Balance {
                const allCashRegister = await CashRegister.findAll();
                const allExpenses = await Expenses.findAll();
 
-               const totalCash = allCashRegister.map((item) => {
-                    return +item.totalCash
-               }).reduce((acc, item) => acc + item)
+               let totalCash = 0
+               let totalExpenses = 0
 
-               const totalExpenses = allExpenses.map((item) => {
-                    return +item.sum
-               }).reduce((acc, item) => acc + item)
+               if (allCashRegister.length > 0) {
+                    totalCash = allCashRegister.map((item) => {
+                         return +item.totalCash
+                    }).reduce((acc, item) => acc + item)
+               }
+
+               if (allExpenses.length > 0) {
+                    totalExpenses = allExpenses.map((item) => {
+                         return +item.sum
+                    }).reduce((acc, item) => acc + item)
+               }
+
 
                return res.status(200).json({ totalCash, totalExpenses, balance: totalCash - totalExpenses });
           }

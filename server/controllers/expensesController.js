@@ -8,17 +8,18 @@ class ExpensesController {
      async deposit(req, res, next) {
           try {
                const { name, date, sum, typesExpenseId } = req.body;
+
+
                let fileName
 
                if (req.files) {
                     const { img } = req.files
-                    uuid.v4() + ".jpg"
+                    fileName = uuid.v4() + ".jpg"
                     img.mv(path.resolve(__dirname, '..', 'static', fileName))
-               }
-               else {
+                    console.log(fileName);
+               } else {
                     fileName = null;
                }
-
 
                if (!name || !date || !sum) {
                     return next(ApiError.notFound(`Заполните все поля!`));
@@ -81,10 +82,10 @@ class ExpensesController {
 
                if (req.files) {
                     const { img } = req.files
-                    uuid.v4() + ".jpg"
+                    fileName = uuid.v4() + ".jpg"
                     img.mv(path.resolve(__dirname, '..', 'static', fileName))
-               }
-               else {
+                    console.log(fileName);
+               } else {
                     fileName = null;
                }
 

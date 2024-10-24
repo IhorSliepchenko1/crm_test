@@ -25,7 +25,7 @@ export const CashRegister = () => {
                          color={`success`}
                          variant={"flat"}
                          onPress={onOpen}
-                         className="mb-5"
+                         className="mb-5 button-add"
                     >Внести кассу</Button>
                     <Balance />
                </div>

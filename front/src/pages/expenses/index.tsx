@@ -27,7 +27,7 @@ export const Expenses = () => {
                          color={`danger`}
                          variant={"flat"}
                          onPress={onOpen}
-                         className="mb-5"
+                         className="mb-5 button-add"
                     >Добавить расход</Button>
                     <Balance />
                </div>

@@ -43,7 +43,7 @@ export const Header = ({ handleBurger }: Props) => {
                               <Button
                                    color="default"
                                    variant="flat"
-                                   className="gap-2"
+                                   className="gap-2 logout"
                                    onClick={handleLogout}
                               >
                                    <CiLogout /> <span>Выйти</span>

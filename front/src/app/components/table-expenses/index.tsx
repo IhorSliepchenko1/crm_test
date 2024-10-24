@@ -1,4 +1,4 @@
-import { Table as TableNext, TableHeader, TableColumn, TableBody, TableRow, TableCell, Pagination, Spinner, getKeyValue, Button, useDisclosure, } from "@nextui-org/react";
+import { Table as TableNext, TableHeader, TableColumn, TableBody, TableRow, TableCell, Pagination, Spinner, getKeyValue, useDisclosure } from "@nextui-org/react";
 import { formatToClientDate } from "../../../utils/format-to-client-date";
 import { DecodeToken, ExpensesData } from "../../types";
 import { useMemo, useState } from "react";
@@ -10,7 +10,6 @@ import { MdDelete, MdModeEditOutline } from "react-icons/md";
 import { ModalDownloadFile } from "../base-modals/modal-download-file";
 import { useAppSelector } from "../../hooks";
 import { jwtDecode } from "jwt-decode";
-import { Tooltip } from "antd";
 import { ModalDelete } from "../base-modals/modal-delete";
 import { useDeleteExpensesMutation, useLazyGetAllExpensesQuery } from "../../services/expensesApi";
 import { useLazyGetBalanceQuery } from "../../services/apiBalance";
@@ -131,10 +130,9 @@ export const TableExpenses = ({ data, limit, isLoading, page, setPage }: Props) 
                                              columnKey === `check` ?
 
                                                   <div className="flex justify-center items-center gap-4">
-                                                       <Button
+                                                       <button
                                                             className="cursor-pointer"
                                                             color={item.img !== null ? `primary` : `warning`}
-                                                            isIconOnly
                                                             onClick={() => {
                                                                  setModalVariant(1)
                                                                  setDataOpenImage(prev => ({ ...prev, path: item.img, name: item.name }))
@@ -146,37 +144,39 @@ export const TableExpenses = ({ data, limit, isLoading, page, setPage }: Props) 
                                                             {item.img !== null ? <FaFileImage />
                                                                  : <PiEmptyBold />
                                                             }
-                                                       </Button>
+                                                       </button>
                                                        <div
                                                             className="cursor-pointer flex flex-col gap-2"
                                                        >
-
-                                                            <Tooltip title={`редактировать`}>
-                                                                 <MdModeEditOutline onClick={() => {
-                                                                      setModalVariant(2)
-                                                                      setDataUpdate((prev) => (
-                                                                           {
-                                                                                ...prev,
-                                                                                name: item.name,
-                                                                                sum: +item.sum,
-                                                                                date: calendarDate(item.date),
-                                                                                id: item.id ?? 0
-                                                                           }))
-                                                                      onOpen()
-                                                                 }} />
-                                                            </Tooltip >
+                                                            <button onClick={() => {
+                                                                 setModalVariant(2)
+                                                                 setDataUpdate((prev) => (
+                                                                      {
+                                                                           ...prev,
+                                                                           name: item.name,
+                                                                           sum: +item.sum,
+                                                                           date: calendarDate(item.date),
+                                                                           id: item.id ?? 0
+                                                                      }))
+                                                                 onOpen()
+                                                            }}>
+                                                                 <MdModeEditOutline />
+                                                            </button>
 
                                                             {decoded.role === `ADMIN` ?
-                                                                 <Tooltip title={`удалить`}>
-                                                                      <MdDelete
-                                                                           className="cursor-pointer" onClick={() => {
-                                                                                setIdCash(item?.id ?? 0)
-                                                                                showModal()
-                                                                                setDeleteDay(formatToClientDate(item.date))
-                                                                                setModalVariant(3)
-                                                                           }} />
 
-                                                                 </Tooltip > :
+                                                                 <button className="cursor-pointer" onClick={() => {
+                                                                      setIdCash(item?.id ?? 0)
+                                                                      showModal()
+                                                                      setDeleteDay(formatToClientDate(item.date))
+                                                                      setModalVariant(3)
+                                                                 }}>
+                                                                      <MdDelete
+                                                                      />
+                                                                 </button>
+
+
+                                                                 :
                                                                  <></>
                                                             }
 

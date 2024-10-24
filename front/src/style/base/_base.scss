@@ -32,6 +32,10 @@ th {
      @include tablet {
           font-size: 10px !important;
      }
+
+     @include mobile {
+          font-size: 7px !important;
+     }
 }
 
 .ant-modal-footer {
@@ -42,6 +46,29 @@ th {
 }
 
 .img-big-container {
-
      height: 100%;
+}
+
+.button-add {
+     @include tablet {
+          font-size: 10px !important;
+          max-height: 30px;
+     }
+
+     @include mobile {
+          font-size: 8px !important;
+          padding: 0;
+     }
+}
+
+.cash-register-card {
+     @include tablet {
+          font-size: 9px !important;
+     }
+}
+
+.logout {
+     @include tablet {
+          font-size: 11px;
+     }
 }

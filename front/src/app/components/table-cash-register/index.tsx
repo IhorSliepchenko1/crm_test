@@ -6,7 +6,6 @@ import { jwtDecode } from "jwt-decode";
 import { useAppSelector } from "../../hooks";
 import { MdDelete } from "react-icons/md";
 import { MdModeEditOutline } from "react-icons/md";
-import { Tooltip } from 'antd';
 import { useDeleteCashRegisterMutation, useLazyGetAllCashRegisterQuery } from "../../services/cashRegisterApi";
 import { CashRegisterUpdate } from "../cash-register-update";
 import { useCalendarInputDate } from "../../hooks/useCalendarInputDate";
@@ -127,22 +126,24 @@ export const Table = ({ data, limit, isLoading, page, setPage }: Props) => {
                                              columnKey === `edit-delete` ? <div className="flex gap-3 justify-center">
                                                   {decoded.role === `ADMIN` ?
                                                        <>
-                                                            <Tooltip title={`удалить`}>
-                                                                 <MdDelete className="cursor-pointer" onClick={() => {
-                                                                      setIdCash(item?.id ?? 0)
-                                                                      showModal()
-                                                                      setDeleteDay(formatToClientDate(item.date))
-                                                                 }} />
-                                                            </Tooltip ></>
+
+                                                            <button className="cursor-pointer" onClick={() => {
+                                                                 setIdCash(item?.id ?? 0)
+                                                                 showModal()
+                                                                 setDeleteDay(formatToClientDate(item.date))
+                                                            }}>
+                                                                 <MdDelete />
+                                                            </button>
+                                                       </>
                                                        : ''}
 
                                                   <>
-                                                       <Tooltip title={`редактировать`}>
-                                                            <MdModeEditOutline className="cursor-pointer" onClick={() => {
-                                                                 setDataUpdate((prev) => ({ ...prev, cash: +item.cash, cashless: +item.cashless, dateProps: calendarDate(item.date), id: item.id ?? 0 }))
-                                                                 onOpen()
-                                                            }} />
-                                                       </Tooltip >
+                                                       <button className="cursor-pointer" onClick={() => {
+                                                            setDataUpdate((prev) => ({ ...prev, cash: +item.cash, cashless: +item.cashless, dateProps: calendarDate(item.date), id: item.id ?? 0 }))
+                                                            onOpen()
+                                                       }}>
+                                                            <MdModeEditOutline />
+                                                       </button>
                                                   </>
 
                                              </div> : columnKey === `date` ? formatToClientDate(item.date) : getKeyValue(item, columnKey)
