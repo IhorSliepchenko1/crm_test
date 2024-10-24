@@ -22,7 +22,7 @@ class ExpensesController {
                }
 
                if (!name || !date || !sum) {
-                    return next(ApiError.notFound(`Заполните все поля!`));
+                    next(ApiError.notFound(`Заполните все поля!`));
                }
 
                const userId = req.user.id;
@@ -60,8 +60,8 @@ class ExpensesController {
                for (let i = 0; i < copyData.rows.length; i++) {
                     const userName = await User.findOne({ where: { id: data.rows[i].userId } });
                     const typeExpenses = await TypesExpenses.findOne({ where: { id: data.rows[i].typesExpenseId } })
-                    const login = userName ? userName.login : 'Anonymous';
-                    const type = typeExpenses ? typeExpenses.name : 'non-type';
+                    const login = userName ? userName.login : 'Неизвестный';
+                    const type = typeExpenses ? typeExpenses.name : 'Без типа';
                     arrayResult.rows.push({ ...copyData.rows[i].dataValues, userName: login, typeName: type });
 
                }
@@ -116,7 +116,7 @@ class ExpensesController {
                const delId = await Expenses.findOne({ where: { id } })
 
                if (!delId) {
-                    return next(ApiError.notFound(`id в базе отсутствует или ранее был удалён!`));
+                    next(ApiError.notFound(`id в базе отсутствует или ранее был удалён!`));
                }
 
 

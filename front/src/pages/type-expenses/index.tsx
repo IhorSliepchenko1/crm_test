@@ -45,7 +45,7 @@ export const TypeExpenses = () => {
      }
 
      return (
-          <div>
+          <div className="type-container">
                <form className="flex items-center gap-1 mb-6" onSubmit={handleSubmit(addtypeExpenses)}>
                     <Input control={control}
                          name="name"

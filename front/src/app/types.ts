@@ -34,7 +34,7 @@ export type Expenses = {
      userId: number
      createdAt: Date
      updatedAt: Date
-     typesExpensesId: number
+     typesExpenseId: number
      userName: string
      typeName: string
 

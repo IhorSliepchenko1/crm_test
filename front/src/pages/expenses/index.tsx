@@ -17,25 +17,21 @@ export const Expenses = () => {
 
 
      return (
-          <>
 
-               <div className="flex justify-between" style={{ marginBottom: 10 }}>
-
-                    <Button
-                         icon={<MdAdd />}
-                         type={`button`}
-                         color={`danger`}
-                         variant={"flat"}
-                         onPress={onOpen}
-                         className="mb-5 button-add"
-                    >Добавить расход</Button>
-                    <Balance />
-               </div>
-
-
+          <div className="flex flex-col container-table">
+               <Button
+                    icon={<MdAdd />}
+                    type={`button`}
+                    color={`danger`}
+                    variant={"flat"}
+                    onPress={onOpen}
+                    className="button-add"
+               >Добавить расход</Button>
+               <Balance />
                <TableExpenses data={data ?? { count: 0, rows: [] }} limit={limit} isLoading={isLoading} page={page} setPage={setPage} />
                <ExpensesDeposit isOpen={isOpen} onOpenChange={onOpenChange} page={page} limit={limit} />
-          </>
+          </div>
+
      )
 }
 

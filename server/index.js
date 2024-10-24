@@ -8,14 +8,21 @@ const bodyParser = require(`body-parser`);
 const fileUpload = require(`express-fileupload`);
 const router = require(`./routes/index.js`);
 const path = require(`path`);
+const fs = require(`fs`);
 const ApiError = require(`./error/ApiError.js`);
 
 const PORT = process.env.PORT || 5000;
 const app = express();
+const staticDir = path.resolve(__dirname, `static`)
+
+if (!fs.existsSync(staticDir)) {
+  fs.mkdirSync(staticDir);
+}
+
 app.use(cors());
 app.use(express.json());
 app.use(bodyParser.json());
-app.use(express.static(path.resolve(__dirname, `static`)));
+app.use(express.static(staticDir));
 app.use(fileUpload({}));
 app.use(`/api`, router);
 

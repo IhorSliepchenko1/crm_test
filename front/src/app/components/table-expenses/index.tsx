@@ -1,7 +1,7 @@
 import { Table as TableNext, TableHeader, TableColumn, TableBody, TableRow, TableCell, Pagination, Spinner, getKeyValue, useDisclosure } from "@nextui-org/react";
 import { formatToClientDate } from "../../../utils/format-to-client-date";
 import { DecodeToken, ExpensesData } from "../../types";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { FaFileImage } from "react-icons/fa";
 import { PiEmptyBold } from "react-icons/pi";
 import { ExpensesUpdate } from "../expenses-update";
@@ -40,7 +40,9 @@ export const TableExpenses = ({ data, limit, isLoading, page, setPage }: Props) 
           sum: 0,
           date: calendarDate(new Date(Date.now())),
           id: 0,
+          typeName: ''
      })
+     const [update, setUpdate] = useState(true)
 
      const [modalVariant, setModalVariant] = useState(0)
 
@@ -88,11 +90,16 @@ export const TableExpenses = ({ data, limit, isLoading, page, setPage }: Props) 
           setIsModalOpen(false);
      };
 
+     useEffect(() => {
+          setUpdate(true)
+     }, [isOpen])
+
 
      return (
 
           <>
                {data?.rows.length === 0 ? <p>Список расходов пуст</p> : <TableNext
+
                     aria-label="Example table with client async pagination"
                     bottomContent={
                          pages > 0 ? (
@@ -145,42 +152,41 @@ export const TableExpenses = ({ data, limit, isLoading, page, setPage }: Props) 
                                                                  : <PiEmptyBold />
                                                             }
                                                        </button>
-                                                       <div
-                                                            className="cursor-pointer flex flex-col gap-2"
-                                                       >
-                                                            <button onClick={() => {
-                                                                 setModalVariant(2)
-                                                                 setDataUpdate((prev) => (
-                                                                      {
-                                                                           ...prev,
-                                                                           name: item.name,
-                                                                           sum: +item.sum,
-                                                                           date: calendarDate(item.date),
-                                                                           id: item.id ?? 0
-                                                                      }))
-                                                                 onOpen()
+
+                                                       <button onClick={() => {
+                                                            setModalVariant(2)
+                                                            setDataUpdate((prev) => (
+                                                                 {
+                                                                      ...prev,
+                                                                      name: item.name,
+                                                                      sum: +item.sum,
+                                                                      date: calendarDate(item.date),
+                                                                      id: item.id ?? 0,
+                                                                      typeName: item.typeName
+                                                                 }))
+                                                            onOpen()
+                                                       }}>
+                                                            <MdModeEditOutline />
+                                                       </button>
+
+                                                       {decoded.role === `ADMIN` ?
+
+                                                            <button className="cursor-pointer" onClick={() => {
+                                                                 setIdCash(item?.id ?? 0)
+                                                                 showModal()
+                                                                 setDeleteDay(formatToClientDate(item.date))
+                                                                 setModalVariant(3)
                                                             }}>
-                                                                 <MdModeEditOutline />
+                                                                 <MdDelete
+                                                                 />
                                                             </button>
 
-                                                            {decoded.role === `ADMIN` ?
 
-                                                                 <button className="cursor-pointer" onClick={() => {
-                                                                      setIdCash(item?.id ?? 0)
-                                                                      showModal()
-                                                                      setDeleteDay(formatToClientDate(item.date))
-                                                                      setModalVariant(3)
-                                                                 }}>
-                                                                      <MdDelete
-                                                                      />
-                                                                 </button>
+                                                            :
+                                                            <></>
+                                                       }
 
 
-                                                                 :
-                                                                 <></>
-                                                            }
-
-                                                       </div>
                                                   </div>
 
                                                   : columnKey === `date` ? formatToClientDate(item.date) : getKeyValue(item, columnKey)}
@@ -216,6 +222,9 @@ export const TableExpenses = ({ data, limit, isLoading, page, setPage }: Props) 
                                    sum={dataUpdate.sum}
                                    date={dataUpdate.date}
                                    id={dataUpdate.id}
+                                   typeName={dataUpdate.typeName}
+                                   update={update}
+                                   setUpdate={setUpdate}
                               />}
 
           </>

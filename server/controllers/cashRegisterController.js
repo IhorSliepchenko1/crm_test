@@ -8,13 +8,13 @@ class CashRegisterController {
 
     try {
       if (cash < 0 || cashless < 0 || !date) {
-        return next(ApiError.notFound(`Заполните все поля!`));
+         next(ApiError.notFound(`Заполните все поля!`));
       }
 
       const checkDudleDate = await CashRegister.findOne({ where: { date: `${date}T00:00:00.000Z` } })
 
       if (checkDudleDate) {
-        return next(ApiError.badRequest(`За эту дату касса внесена!`));
+         next(ApiError.badRequest(`За эту дату касса внесена!`));
       }
 
       const totalCash = +cash + (+cashless - (+cashless / 100) * 1.3);

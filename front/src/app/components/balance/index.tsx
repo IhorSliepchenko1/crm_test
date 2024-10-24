@@ -1,21 +1,22 @@
 import { useGetBalanceQuery } from "../../services/apiBalance";
-import { Card, CardBody, Divider } from "@nextui-org/react";
+import { Card, CardBody, Divider, Chip } from "@nextui-org/react";
 
 export const Balance = () => {
      const { data } = useGetBalanceQuery()
 
      return (
-          <div className="flex justify-start cash-register-card">
+          <div className="cash-register-card">
                <Card >
                     <CardBody>
-                         <p className="p-2 flex justify-between gap-4"><span>Кассы:</span><span>{data?.totalCash.toFixed(2)} грн.</span></p>
+                         <p className="p-2 flex justify-between gap-4"><span>Сумма касс</span><Chip color="primary">{data?.totalCash.toFixed(2)} грн.</Chip></p>
                          <Divider />
-                         <p className="p-2 flex justify-between gap-4"><span>Расходы:</span><span>{data?.totalExpenses.toFixed(2)} грн.</span></p>
+                         <p className="p-2 flex justify-between gap-4"><span>Расходы</span><Chip color="danger">{data?.totalExpenses.toFixed(2)} грн.</Chip></p>
                          <Divider />
-                         <p className="p-2 flex justify-between gap-4"><span>Остаток:</span><span>{data?.balance.toFixed(2)} грн.</span></p>
+                         <p className="p-2 flex justify-between gap-4"><span>Баланс</span><Chip color="success">{data?.balance.toFixed(2)} грн.</Chip></p>
                          <Divider />
                     </CardBody>
                </Card>
           </div>
+
      )
 }

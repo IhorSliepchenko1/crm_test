@@ -91,7 +91,6 @@ export const Table = ({ data, limit, isLoading, page, setPage }: Props) => {
 
                {
                     data?.rows.length === 0 ? <p>Список касс пуст</p> : <TableNext
-                         aria-label="Example table with client async pagination"
                          bottomContent={
                               pages > 0 ? (
                                    <div className="flex w-full justify-center">
@@ -103,6 +102,7 @@ export const Table = ({ data, limit, isLoading, page, setPage }: Props) => {
                                              page={page}
                                              total={pages}
                                              onChange={(page) => setPage(page)}
+
                                         />
                                    </div>
                               ) : null
@@ -117,7 +117,7 @@ export const Table = ({ data, limit, isLoading, page, setPage }: Props) => {
                          </TableHeader>
                          <TableBody
                               items={data?.rows ?? []}
-                              loadingContent={<Spinner />}
+                              loadingContent={<Spinner content="Загрузка.." />}
                               loadingState={loadingState}
                          >
                               {(item) => (

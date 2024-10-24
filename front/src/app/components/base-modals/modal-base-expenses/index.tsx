@@ -6,6 +6,7 @@ import { Input } from "../../input";
 import { ErrorMessage } from "../../error-message";
 import { Control, SubmitHandler, UseFormHandleSubmit } from "react-hook-form";
 import { TypesExpenses } from "../../../types";
+import { Chip } from "@nextui-org/react";
 
 
 type Expenses = {
@@ -25,10 +26,25 @@ type Props = {
      types: TypesExpenses[] | []
      setTypeId: (value: React.SetStateAction<string>) => void | undefined
      handleFileChange: (e: React.ChangeEvent<HTMLInputElement>) => void
-
+     update?: boolean
+     typeName?: string
+     setUpdate: React.Dispatch<React.SetStateAction<boolean>>
 }
 
-export const ModalExpensesBase = ({ isOpen, resetInput, control, handleSubmit, onSubmit, error, handleFileChange, types, setTypeId, }: Props) => {
+export const ModalExpensesBase = ({
+     isOpen,
+     resetInput,
+     control,
+     handleSubmit,
+     onSubmit,
+     error,
+     handleFileChange,
+     types,
+     setTypeId,
+     update = false,
+     typeName,
+     setUpdate
+}: Props) => {
      const { theme } = useTheme()
 
 
@@ -62,18 +78,26 @@ export const ModalExpensesBase = ({ isOpen, resetInput, control, handleSubmit, o
                                         type="date"
                                         required="Обязательное поле" />
 
-                                   <Select
-                                        label="Тип расходов"
-                                        className="max-w-xs"
-                                        onChange={(e) => setTypeId(e.target.value)
-                                        }
-                                   >
-                                        {types.map((type) => (
-                                             <SelectItem key={type.id} value={type.id}>
-                                                  {type.name}
-                                             </SelectItem>
-                                        ))}
-                                   </Select>
+
+                                   {
+                                        update ? <div className="flex justify-between">
+                                             <Chip color="secondary">тип: {typeName}</Chip>
+
+
+                                             <Chip className="cursor-pointer" color="warning" onClick={() => setUpdate((prev) => !prev)}>сменить тип?</Chip></div> : <Select
+                                                  label="Тип расходов"
+                                                  className="max-w-xs"
+                                                  onChange={(e) => setTypeId(e.target.value)
+                                                  }
+                                             >
+                                             {types.map((type) => (
+                                                  <SelectItem key={type.id} value={type.id}>
+                                                       {type.name}
+                                                  </SelectItem>
+                                             ))}
+                                        </Select>
+                                   }
+
 
 
                                    <input

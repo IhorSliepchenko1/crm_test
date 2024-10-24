@@ -1,16 +1,14 @@
-import { Link } from "react-router-dom"
-import { Button } from "../button"
+import { Link } from "react-router-dom";
 
 type Props = {
      children: React.ReactNode
-     icon: JSX.Element
-     href: string
-     classProps?: string
+     to: string
+     active?: string
 }
-export const NavButton = ({ children, icon, href, classProps }: Props) => {
+export const NavButton = ({ children, to, active = '' }: Props) => {
      return (
-          <Button className={`flex justify-start text-xl ${classProps || ''}`} icon={icon}>
-               <Link to={href}>{children}</Link>
-          </Button>
+          <Link to={to} className={`nav-btn  ${active}`}>
+               {children}
+          </Link >
      )
 }

@@ -3,11 +3,14 @@ import { MdDelete } from "react-icons/md";
 import { MdEdit } from "react-icons/md";
 import { useForm } from "react-hook-form";
 import { Input } from "../input";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { useDeleteTypeMutation, useLazyGetAllTypeQuery, useUpdateTypeMutation } from "../../services/typeApi";
 import { ErrorMessage } from "../error-message";
 import { hasErrorField } from "../../../utils/has-error-field";
 import { IoMdAddCircleOutline } from "react-icons/io";
+import { jwtDecode } from "jwt-decode";
+import { useAppSelector } from "../../hooks";
+import { DecodeToken } from "../../types";
 
 type Props = {
      name: string
@@ -67,6 +70,23 @@ export const TypeExpensesForm = ({ name, id }: Props) => {
           }
      }
 
+
+     const { token } = useAppSelector((state) => state.auth)
+
+     const decoded: DecodeToken = useMemo(() => {
+          if (typeof token === `string`) {
+               return jwtDecode(token);
+          } else {
+               return {
+                    exp: 0,
+                    iat: 0,
+                    id: 0,
+                    login: '',
+                    role: '',
+               }
+          }
+     }, [token])
+
      return (
 
           <>
@@ -83,9 +103,11 @@ export const TypeExpensesForm = ({ name, id }: Props) => {
                          disabled={!disabledInput}
                     />
                     <div className="flex gap-2">
-                         <Button color="danger" isIconOnly onClick={() => deleteTypeRegister()}>
+
+                         {decoded.role === `ADMIN` && <Button color="danger" isIconOnly onClick={() => deleteTypeRegister()}>
                               <MdDelete />
-                         </Button>
+                         </Button>}
+
                          <Button color={disabledInput ? "warning" : "primary"} isIconOnly onClick={() => setDisabledInput(prev => !prev)}>
                               <MdEdit />
                          </Button>
@@ -102,7 +124,5 @@ export const TypeExpensesForm = ({ name, id }: Props) => {
                     <ErrorMessage error={error} />
                </div>
 
-          </>
-          // <form className="flex items-center justify-between py-1.5 gap-2" onSubmit={handleSubmit(updateTypeRegister)}>//-
-     )
+          </>)
 }

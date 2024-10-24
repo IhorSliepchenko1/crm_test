@@ -21,9 +21,12 @@ type Props = {
      sum: number
      date: string
      id: number
+     typeName: string
+     update: boolean
+     setUpdate: React.Dispatch<React.SetStateAction<boolean>>
 }
 
-export const ExpensesUpdate = ({ name, sum, date, isOpen, onOpenChange, page, limit, id }: Props) => {
+export const ExpensesUpdate = ({ name, sum, date, isOpen, onOpenChange, page, limit, id, typeName, update, setUpdate }: Props) => {
      const [error, setError] = useState("")
      const [selectedFile, setSelectedFile] = useState<File | null>(null)
      const [typeId, setTypeId] = useState('0')
@@ -111,6 +114,9 @@ export const ExpensesUpdate = ({ name, sum, date, isOpen, onOpenChange, page, li
                error={error}
                setSelectedFile={setSelectedFile}
                setTypeId={setTypeId}
-               types={types} />
+               types={types}
+               update={update}
+               typeName={typeName}
+               setUpdate={setUpdate} />
      )
 }

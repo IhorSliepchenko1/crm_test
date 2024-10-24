@@ -8,7 +8,7 @@ class TypesExpensesController {
 
           try {
                if (!name) {
-                    return next(ApiError.notFound(`Заполните все поля!`));
+                    next(ApiError.notFound(`Заполните все поля!`));
                }
 
                const typeExpense = await TypesExpenses.create({ name });
@@ -48,7 +48,7 @@ class TypesExpensesController {
                const delId = await TypesExpenses.findOne({ where: { id } })
 
                if (!delId) {
-                    return next(ApiError.notFound(`id в базе отсутствует или ранее был удалён!`));
+                    next(ApiError.notFound(`id в базе отсутствует или ранее был удалён!`));
                }
 
 

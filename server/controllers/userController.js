@@ -15,18 +15,18 @@ class UserController {
       const { login, password, role } = req.body;
 
       if (!login || !password) {
-        return next(ApiError.notFound(`Логин и пароль обязательны!`));
+        next(ApiError.notFound(`Логин и пароль обязательны!`));
       }
 
 
       if (password.length < 6) {
-        return next(ApiError.badRequest(`Пароль должен быть не менее 6 символов`));
+        next(ApiError.badRequest(`Пароль должен быть не менее 6 символов`));
       }
 
       const candidate = await User.findOne({ where: { login } });
 
       if (candidate) {
-        return next(ApiError.badRequest(`${login} уже существует`));
+        next(ApiError.badRequest(`${login} уже существует`));
       }
 
       const hashPassword = await bcrypt.hash(password, 12);
@@ -44,19 +44,19 @@ class UserController {
       const { login, password } = req.body;
 
       if (!login || !password) {
-        return next(ApiError.notFound(`Логин и пароль обязательны!`));
+        next(ApiError.notFound(`Логин и пароль обязательны!`));
       }
 
       const user = await User.findOne({ where: { login } });
 
       if (!user) {
-        return next(ApiError.badRequest(`${login} не найден`));
+        next(ApiError.badRequest(`${login} не найден`));
       }
 
       const comparePassword = bcrypt.compareSync(password, user.password);
 
       if (!comparePassword) {
-        return next(ApiError.unauthorized(`Указан неверный пароль`));
+        next(ApiError.unauthorized(`Указан неверный пароль`));
       }
 
       const token = generateJwt(user.id, user.login, user.role);

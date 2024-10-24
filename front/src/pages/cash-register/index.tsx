@@ -16,21 +16,18 @@ export const CashRegister = () => {
 
      return (
 
-          <>
-               <div className="flex justify-between" style={{ marginBottom: 10 }}>
+          <div className="flex flex-col container-table">
+               <Button
+                    icon={<MdAdd />}
+                    type={`button`}
+                    color={`success`}
+                    variant={"flat"}
+                    onPress={onOpen}
+                    className="button-add"
+               >Внести кассу</Button>
+               <Balance />
 
-                    <Button
-                         icon={<MdAdd />}
-                         type={`button`}
-                         color={`success`}
-                         variant={"flat"}
-                         onPress={onOpen}
-                         className="mb-5 button-add"
-                    >Внести кассу</Button>
-                    <Balance />
-               </div>
                <Table data={data} limit={limit} isLoading={isLoading} page={page} setPage={setPage} />
-               <CashRegisterDeposit isOpen={isOpen} onOpenChange={onOpenChange} page={page} limit={limit} />
-          </>
+               <CashRegisterDeposit isOpen={isOpen} onOpenChange={onOpenChange} page={page} limit={limit} />      </div>
      )
 }
